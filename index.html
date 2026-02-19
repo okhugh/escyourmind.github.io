@@ -33,10 +33,6 @@
             background: #FFEE00;
         }
 
-        .hero-gradient {
-            background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0) 100%);
-        }
-
         .nav-transition {
             transition: all 0.3s ease;
         }
@@ -57,6 +53,21 @@
         .mobile-menu.open {
             transform: translateX(0);
         }
+
+        .view-section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .view-section.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .hero-gradient {
+            background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0) 100%);
+        }
     </style>
 </head>
 <body class="custom-scroll">
@@ -68,28 +79,28 @@
                 <button class="lg:hidden" onclick="toggleMenu(true)">
                     <i data-lucide="menu" size="24"></i>
                 </button>
-                <h1 class="text-2xl font-black tracking-tighter uppercase">
+                <h1 onclick="navigateTo('home')" class="text-2xl font-black tracking-tighter uppercase cursor-pointer">
                     ESCAPE<span class="text-[#FFEE00]">YOUR</span>MIND
                 </h1>
                 <div class="hidden lg:flex gap-6 text-sm font-medium uppercase tracking-widest text-gray-400">
-                    <a href="#" class="hover:text-[#FFEE00] transition-colors">New Drops</a>
-                    <a href="#" class="hover:text-[#FFEE00] transition-colors">Men</a>
-                    <a href="#" class="hover:text-[#FFEE00] transition-colors">Women</a>
-                    <a href="#" class="hover:text-[#FFEE00] transition-colors">Sale</a>
+                    <button onclick="navigateTo('new_drop')" class="hover:text-[#FFEE00] transition-colors">New Drop</button>
+                    <button onclick="navigateTo('men')" class="hover:text-[#FFEE00] transition-colors">Men</button>
+                    <button onclick="navigateTo('women')" class="hover:text-[#FFEE00] transition-colors">Women</button>
+                    <button onclick="navigateTo('sale')" class="hover:text-[#FFEE00] transition-colors">Sale</button>
                 </div>
             </div>
 
             <div class="flex items-center gap-5">
-                <button class="hidden sm:block hover:text-[#FFEE00] transition-colors">
+                <button onclick="navigateTo('search')" class="hover:text-[#FFEE00] transition-colors">
                     <i data-lucide="search" size="20"></i>
                 </button>
-                <button class="flex items-center gap-2 hover:text-[#FFEE00] transition-colors group">
+                <button onclick="navigateTo('login')" class="flex items-center gap-2 hover:text-[#FFEE00] transition-colors group">
                     <i data-lucide="user" size="20"></i>
                     <span class="text-xs font-bold uppercase tracking-tighter hidden md:block">Login</span>
                 </button>
-                <button class="relative group">
+                <button onclick="navigateTo('cart')" class="relative group">
                     <i data-lucide="shopping-bag" size="20" class="group-hover:text-[#FFEE00] transition-colors"></i>
-                    <span class="absolute -top-2 -right-2 bg-[#FFEE00] text-black text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">0</span>
+                    <span id="cart-count" class="absolute -top-2 -right-2 bg-[#FFEE00] text-black text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">0</span>
                 </button>
             </div>
         </div>
@@ -102,228 +113,348 @@
             <button onclick="toggleMenu(false)"><i data-lucide="x" size="32"></i></button>
         </div>
         <div class="flex flex-col gap-8 text-4xl font-black uppercase">
-            <a href="#" class="text-[#FFEE00]">New Drops</a>
-            <a href="#">Men</a>
-            <a href="#">Women</a>
-            <a href="#">Lookbook</a>
-            <a href="#">Sale</a>
+            <button onclick="navigateTo('home'); toggleMenu(false)" class="text-left text-[#FFEE00]">Home</button>
+            <button onclick="navigateTo('new_drop'); toggleMenu(false)" class="text-left">New Drop</button>
+            <button onclick="navigateTo('men'); toggleMenu(false)" class="text-left">Men</button>
+            <button onclick="navigateTo('women'); toggleMenu(false)" class="text-left">Women</button>
+            <button onclick="navigateTo('sale'); toggleMenu(false)" class="text-left">Sale</button>
         </div>
     </div>
 
-    <!-- Hero Section -->
-    <section class="relative h-screen flex items-center overflow-hidden">
-        <div class="absolute inset-0 z-0">
-            <img 
-                src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=2000" 
-                class="w-full h-full object-cover opacity-60 grayscale hover:grayscale-0 transition-all duration-1000"
-                alt="Hero"
-            />
-            <div class="absolute inset-0 hero-gradient"></div>
-        </div>
+    <!-- MAIN VIEWS -->
+    <div id="views-container">
         
-        <div class="relative z-10 max-w-7xl mx-auto px-6 w-full mt-20">
-            <p class="text-[#FFEE00] font-bold uppercase tracking-[0.3em] mb-4 text-sm animate-pulse">F/W 2026 DROP NOW LIVE</p>
-            <h2 class="text-6xl md:text-9xl font-black uppercase leading-[0.85] mb-8 tracking-tighter">
-                DROP<br />
-                <span class="text-[#FFEE00]">NAME.</span>
-            </h2>
-            <div class="flex flex-col sm:flex-row gap-4">
-                <button class="bg-[#FFEE00] text-black px-10 py-5 font-black uppercase tracking-tighter hover:bg-white transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2 group">
-                    Shop Collection <i data-lucide="arrow-right" size="20" class="group-hover:translate-x-1 transition-transform"></i>
-                </button>
-                <button class="border-2 border-white/30 backdrop-blur-sm text-white px-10 py-5 font-black uppercase tracking-tighter hover:border-[#FFEE00] hover:text-[#FFEE00] transition-all">
-                    View Lookbook
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Categories -->
-    <section class="py-24 max-w-7xl mx-auto px-6">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="category-grid">
-            <!-- Categories injected by JS -->
-        </div>
-    </section>
-
-    <!-- Trending Products -->
-    <section class="py-24 bg-[#0a0a0a]">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="flex justify-between items-end mb-12">
-                <div>
-                    <h2 class="text-4xl font-black uppercase">The Essentials</h2>
-                    <p class="text-gray-500 mt-2 font-medium tracking-wide">High-performance fabrics meeting street aesthetics.</p>
+        <!-- Home View -->
+        <section id="view-home" class="view-section active">
+            <div class="relative h-screen flex items-center overflow-hidden">
+                <div class="absolute inset-0 z-0">
+                    <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=2000" class="w-full h-full object-cover opacity-60 grayscale" alt="Hero">
+                    <div class="absolute inset-0 hero-gradient"></div>
                 </div>
-                <a href="#" class="hidden sm:flex items-center gap-2 text-[#FFEE00] font-bold uppercase tracking-tighter hover:text-white transition-colors">
-                    Browse All <i data-lucide="chevron-right" size="18"></i>
-                </a>
+                <div class="relative z-10 max-w-7xl mx-auto px-6 w-full mt-20">
+                    <p class="text-[#FFEE00] font-bold uppercase tracking-[0.3em] mb-4 text-sm animate-pulse">F/W 2026 DROP NOW LIVE</p>
+                    <h2 class="text-6xl md:text-9xl font-black uppercase leading-[0.85] mb-8 tracking-tighter">DROP<br /><span class="text-[#FFEE00]">NAME.</span></h2>
+                    <button onclick="navigateTo('new_drop')" class="bg-[#FFEE00] text-black px-10 py-5 font-black uppercase tracking-tighter hover:bg-white transition-all transform hover:-translate-y-1 flex items-center gap-2 group">
+                        Shop Collection <i data-lucide="arrow-right" size="20"></i>
+                    </button>
+                </div>
             </div>
 
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8" id="product-grid">
-                <!-- Products injected by JS -->
-            </div>
-        </div>
-    </section>
+            <!-- Categories Grid -->
+            <section class="py-24 max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div onclick="navigateTo('outerwear')" class="group relative h-80 overflow-hidden cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-80" />
+                    <div class="absolute inset-0 bg-black/40"></div>
+                    <div class="absolute bottom-8 left-8">
+                        <h3 class="text-2xl font-black uppercase">Outerwear</h3>
+                        <div class="w-12 h-1 bg-[#FFEE00] mt-2 group-hover:w-full transition-all duration-500"></div>
+                    </div>
+                </div>
+                <div onclick="navigateTo('streetwear')" class="group relative h-80 overflow-hidden cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-80" />
+                    <div class="absolute inset-0 bg-black/40"></div>
+                    <div class="absolute bottom-8 left-8">
+                        <h3 class="text-2xl font-black uppercase">Streetwear</h3>
+                        <div class="w-12 h-1 bg-[#FFEE00] mt-2 group-hover:w-full transition-all duration-500"></div>
+                    </div>
+                </div>
+                <div onclick="navigateTo('accessories')" class="group relative h-80 overflow-hidden cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1509100194014-d49809396daa?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-80" />
+                    <div class="absolute inset-0 bg-black/40"></div>
+                    <div class="absolute bottom-8 left-8">
+                        <h3 class="text-2xl font-black uppercase">Accessories</h3>
+                        <div class="w-12 h-1 bg-[#FFEE00] mt-2 group-hover:w-full transition-all duration-500"></div>
+                    </div>
+                </div>
+            </section>
 
-    <!-- Newsletter -->
-    <section class="py-24 relative overflow-hidden">
-        <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
-            <h2 class="text-5xl md:text-7xl font-black uppercase mb-6">Join the <span class="text-[#FFEE00]">Collective.</span></h2>
-            <p class="text-gray-400 mb-10 text-lg max-w-xl mx-auto font-medium">Get early access to drops and exclusive content. No noise, just the culture.</p>
-            <div class="flex flex-col sm:flex-row gap-0 max-w-lg mx-auto border-2 border-white/20 focus-within:border-[#FFEE00] transition-colors">
-                <input 
-                    type="email" 
-                    placeholder="YOUR@EMAIL.COM" 
-                    class="bg-transparent px-6 py-4 outline-none flex-grow font-bold tracking-widest text-sm text-white"
-                />
-                <button class="bg-[#FFEE00] text-black px-8 py-4 font-black uppercase tracking-tighter hover:bg-white transition-colors">
-                    Sign Up
-                </button>
+            <!-- Essentials Preview -->
+            <section class="py-24 bg-[#0a0a0a]">
+                <div class="max-w-7xl mx-auto px-6">
+                    <div class="flex justify-between items-end mb-12">
+                        <div>
+                            <h2 class="text-4xl font-black uppercase">The Essentials</h2>
+                            <p class="text-gray-500 mt-2 font-medium tracking-wide">High-performance fabrics meeting street aesthetics.</p>
+                        </div>
+                        <button onclick="navigateTo('essentials')" class="flex items-center gap-2 text-[#FFEE00] font-bold uppercase tracking-tighter hover:text-white transition-colors">
+                            Browse All <i data-lucide="chevron-right" size="18"></i>
+                        </button>
+                    </div>
+                    <div id="essentials-preview-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-8">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- Collection / Category View -->
+        <section id="view-collection" class="view-section py-32 px-6 max-w-7xl mx-auto">
+            <h2 id="collection-title" class="text-5xl font-black uppercase tracking-tighter mb-4">COLLECTION</h2>
+            <div class="w-20 h-2 bg-[#FFEE00] mb-12"></div>
+            <div id="collection-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
+                <!-- 4x8 Grid Generated by JS -->
             </div>
-        </div>
-        <div class="absolute -bottom-20 -left-20 text-[20rem] font-black text-white/5 select-none pointer-events-none leading-none uppercase">OA</div>
-    </section>
+        </section>
+
+        <!-- Search View -->
+        <section id="view-search" class="view-section py-32 px-6 max-w-7xl mx-auto min-h-screen">
+            <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="SEARCH COLLECTION..." class="w-full bg-transparent border-b-2 border-white/10 pb-4 text-4xl md:text-6xl font-black uppercase tracking-tighter outline-none focus:border-[#FFEE00] transition-colors">
+            <div id="search-results-grid" class="mt-12 grid grid-cols-2 lg:grid-cols-4 gap-8"></div>
+        </section>
+
+        <!-- Cart View -->
+        <section id="view-cart" class="view-section py-32 px-6 max-w-3xl mx-auto min-h-screen">
+            <h2 class="text-5xl font-black uppercase tracking-tighter mb-12">Your Cart</h2>
+            <div id="cart-items-container" class="space-y-6"></div>
+            <div id="cart-footer" class="mt-12 pt-8 border-t border-white/10 flex justify-between items-end hidden">
+                <div>
+                    <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest">Total Amount</p>
+                    <p id="cart-total" class="text-4xl font-black text-[#FFEE00]">$0.00</p>
+                </div>
+                <button class="bg-[#FFEE00] text-black px-12 py-5 font-black uppercase tracking-tighter hover:bg-white transition-colors">Checkout</button>
+            </div>
+        </section>
+
+        <!-- Login / Signup View -->
+        <section id="view-login" class="view-section py-32 px-6 flex items-center justify-center min-h-screen">
+            <div class="max-w-md w-full">
+                <div class="text-center mb-12">
+                    <h2 id="auth-title" class="text-5xl font-black uppercase tracking-tighter mb-4">MEMBER<br/><span class="text-[#FFEE00]">ACCESS</span></h2>
+                    <p id="auth-subtitle" class="text-zinc-500 font-bold tracking-widest text-xs uppercase">Enter your credentials to continue.</p>
+                </div>
+                
+                <form action="auth.php" method="POST" class="space-y-8">
+                    <input type="hidden" id="auth-action" name="action" value="login">
+                    
+                    <div id="signup-name-field" class="space-y-2 group hidden">
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-zinc-500 group-focus-within:text-[#FFEE00]">Full Name</label>
+                        <input type="text" name="name" class="w-full bg-transparent border-b-2 border-white/10 py-3 outline-none focus:border-[#FFEE00] font-bold tracking-tight">
+                    </div>
+
+                    <div class="space-y-2 group">
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-zinc-500 group-focus-within:text-[#FFEE00]">Email Address</label>
+                        <input type="email" name="email" required class="w-full bg-transparent border-b-2 border-white/10 py-3 outline-none focus:border-[#FFEE00] font-bold tracking-tight">
+                    </div>
+
+                    <div class="space-y-2 group">
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-zinc-500 group-focus-within:text-[#FFEE00]">Password</label>
+                        <input type="password" name="password" required class="w-full bg-transparent border-b-2 border-white/10 py-3 outline-none focus:border-[#FFEE00] font-bold tracking-tight">
+                    </div>
+
+                    <button type="submit" id="auth-submit-btn" class="w-full bg-[#FFEE00] text-black py-5 font-black uppercase tracking-tighter hover:bg-white transition-all transform hover:-translate-y-1">Sign In</button>
+                </form>
+
+                <div class="mt-12 text-center">
+                    <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest">
+                        <span id="auth-switch-text">Not a member?</span> 
+                        <button onclick="toggleAuthMode()" id="auth-switch-btn" class="text-[#FFEE00] ml-2 hover:underline">Join the Collective</button>
+                    </p>
+                    <button onclick="navigateTo('home')" class="mt-8 text-xs font-black uppercase tracking-tighter text-zinc-500 hover:text-white flex items-center justify-center gap-2 mx-auto">
+                        <i data-lucide="arrow-left" size="14"></i> Back to Store
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
 
     <!-- Footer -->
-    <footer class="bg-black border-t border-white/5 pt-20 pb-10">
+    <footer id="main-footer" class="bg-black border-t border-white/5 pt-20 pb-10 mt-20">
         <div class="max-w-7xl mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
                 <div>
                     <h1 class="text-2xl font-black mb-6 uppercase">ESCAPE<span class="text-[#FFEE00]">YOUR</span>MIND</h1>
-                    <p class="text-gray-500 text-sm leading-relaxed mb-6 font-medium">
-                        Designing the future of urban silhouettes. Based in London, shipping worldwide. Quality without compromise.
-                    </p>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6 font-medium">Designing the future of urban silhouettes. Based in London, shipping worldwide.</p>
                     <div class="flex gap-4">
-                        <i data-lucide="instagram" size="20" class="text-gray-400 hover:text-[#FFEE00] cursor-pointer"></i>
-                        <i data-lucide="twitter" size="20" class="text-gray-400 hover:text-[#FFEE00] cursor-pointer"></i>
-                        <i data-lucide="facebook" size="20" class="text-gray-400 hover:text-[#FFEE00] cursor-pointer"></i>
+                        <i data-lucide="instagram" class="text-gray-400 hover:text-[#FFEE00] cursor-pointer"></i>
+                        <i data-lucide="twitter" class="text-gray-400 hover:text-[#FFEE00] cursor-pointer"></i>
+                        <i data-lucide="facebook" class="text-gray-400 hover:text-[#FFEE00] cursor-pointer"></i>
                     </div>
                 </div>
                 <div>
                     <h4 class="font-black uppercase tracking-widest text-xs mb-8 text-[#FFEE00]">Shop</h4>
                     <ul class="space-y-4 text-sm font-bold text-gray-400 uppercase">
-                        <li><a href="#" class="hover:text-white transition-colors">New Arrivals</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Bestsellers</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Accessories</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">The Vault</a></li>
+                        <li><button onclick="navigateTo('new_drop')" class="hover:text-white">New Arrivals</button></li>
+                        <li><button onclick="navigateTo('essentials')" class="hover:text-white">Bestsellers</button></li>
+                        <li><button onclick="navigateTo('accessories')" class="hover:text-white">Accessories</button></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="font-black uppercase tracking-widest text-xs mb-8 text-[#FFEE00]">Support</h4>
                     <ul class="space-y-4 text-sm font-bold text-gray-400 uppercase">
-                        <li><a href="#" class="hover:text-white transition-colors">Track Order</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Shipping Policy</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Returns</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="#" class="hover:text-white">Track Order</a></li>
+                        <li><a href="#" class="hover:text-white">Shipping</a></li>
+                        <li><a href="#" class="hover:text-white">Returns</a></li>
                     </ul>
                 </div>
-                <div>
-                    <h4 class="font-black uppercase tracking-widest text-xs mb-8 text-[#FFEE00]">Status</h4>
-                    <div class="bg-zinc-900 p-4 rounded-sm border border-white/5">
-                        <div class="flex items-center gap-2 mb-2">
-                            <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                            <span class="text-[10px] font-black uppercase tracking-tighter">Logistics Normal</span>
-                        </div>
-                        <p class="text-[10px] text-gray-500 font-bold leading-tight uppercase">Avg. Delivery: 2-4 Business Days worldwide via OA Express.</p>
+                <div class="bg-zinc-900 p-6 border border-white/5">
+                    <h4 class="font-black uppercase tracking-widest text-[10px] text-[#FFEE00] mb-4">Status</h4>
+                    <div class="flex items-center gap-2 mb-2">
+                        <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                        <span class="text-[10px] font-black uppercase">Logistics Normal</span>
                     </div>
                 </div>
             </div>
-            <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-[10px] font-bold text-gray-600 tracking-widest uppercase">© 2026 Escape Your Mind Collective. All Rights Reserved.</p>
-                <div class="flex gap-6 text-[10px] font-bold text-gray-600 uppercase tracking-widest">
-                    <a href="#">Privacy</a>
-                    <a href="#">Terms</a>
-                    <a href="#">Cookies</a>
-                </div>
-            </div>
+            <p class="text-[10px] font-bold text-gray-600 tracking-widest uppercase text-center md:text-left">© 2026 Escape Your Mind Collective. All Rights Reserved.</p>
         </div>
     </footer>
 
     <script>
-        // Data
-        const categories = [
-            { name: 'Outerwear', image: 'https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&q=80&w=800' },
-            { name: 'Streetwear', image: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=800' },
-            { name: 'Accessories', image: 'https://images.unsplash.com/photo-1509100194014-d49809396daa?auto=format&fit=crop&q=80&w=800' }
+        // State
+        let currentView = 'home';
+        let cart = [];
+        let isSignUp = false;
+
+        // Inventory
+        const essentials = [
+            { id: 'f1', name: 'Cyber-Yellow Tech Hoodie', price: '$85', category: 'F/W Drop', image: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=600' },
+            { id: 'f2', name: 'Matte Black Utility Cargo', price: '$110', category: 'Essential', image: 'https://images.unsplash.com/photo-1624372533038-f5b269bc737d?auto=format&fit=crop&q=80&w=600' },
+            { id: 'f3', name: 'Vantage Graphic Tee', price: '$45', category: 'Limited', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&q=80&w=600' },
+            { id: 'f4', name: 'Amber Shield Sunglasses', price: '$65', category: 'Accessory', image: 'https://images.unsplash.com/photo-1511499767390-a73953f76187?auto=format&fit=crop&q=80&w=600' },
         ];
 
-        const products = [
-            { id: 1, name: 'Cyber-Yellow Tech Hoodie', price: '$85', category: 'New Drop', image: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=600' },
-            { id: 2, name: 'Matte Black Utility Cargo', price: '$110', category: 'Essential', image: 'https://images.unsplash.com/photo-1624372533038-f5b269bc737d?auto=format&fit=crop&q=80&w=600' },
-            { id: 3, name: 'Vantage Graphic Tee', price: '$45', category: 'Limited', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&q=80&w=600' },
-            { id: 4, name: 'Amber Shield Sunglasses', price: '$65', category: 'Accessory', image: 'https://images.unsplash.com/photo-1511499767390-a73953f76187?auto=format&fit=crop&q=80&w=600' },
-        ];
+        const placeholders = Array.from({ length: 32 }, (_, i) => ({
+            id: `p-${i}`,
+            name: `COLLECTION PIECE ${String(i + 1).padStart(2, '0')}`,
+            price: `$${(Math.floor(Math.random() * 120) + 40)}`,
+            category: 'F/W 2026',
+            image: 'https://images.unsplash.com/photo-1550614000-4895a10e1bfd?auto=format&fit=crop&q=80&w=600'
+        }));
 
-        // Navbar Scroll Logic
-        window.addEventListener('scroll', () => {
-            const nav = document.getElementById('navbar');
-            if (window.scrollY > 20) {
-                nav.classList.add('scrolled');
-                nav.classList.remove('py-6');
-                nav.classList.add('py-3');
-            } else {
-                nav.classList.remove('scrolled');
-                nav.classList.add('py-6');
-                nav.classList.remove('py-3');
-            }
-        });
+        const allInventory = [...essentials, ...placeholders];
 
-        // Mobile Menu Logic
-        function toggleMenu(isOpen) {
-            const menu = document.getElementById('mobile-menu');
-            if (isOpen) {
-                menu.classList.add('open');
-                document.body.style.overflow = 'hidden';
+        // Core Functions
+        function navigateTo(viewId) {
+            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+            
+            let targetId = 'view-home';
+            if (['new_drop', 'men', 'women', 'sale', 'outerwear', 'streetwear', 'accessories', 'essentials'].includes(viewId)) {
+                targetId = 'view-collection';
+                renderCollection(viewId);
             } else {
-                menu.classList.remove('open');
-                document.body.style.overflow = 'auto';
+                targetId = `view-${viewId}`;
             }
+
+            const target = document.getElementById(targetId);
+            if (target) target.classList.add('active');
+            
+            window.scrollTo(0, 0);
+            lucide.createIcons();
         }
 
-        // Initialize UI Elements
-        function init() {
-            // Render Categories
-            const catGrid = document.getElementById('category-grid');
-            catGrid.innerHTML = categories.map(cat => `
-                <div class="group relative h-80 overflow-hidden cursor-pointer">
-                    <img src="${cat.image}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-80" />
-                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors"></div>
-                    <div class="absolute bottom-8 left-8">
-                        <h3 class="text-2xl font-black uppercase group-hover:text-[#FFEE00] transition-colors">${cat.name}</h3>
-                        <div class="w-12 h-1 bg-[#FFEE00] mt-2 group-hover:w-full transition-all duration-500"></div>
-                    </div>
-                </div>
-            `).join('');
+        function toggleMenu(isOpen) {
+            const menu = document.getElementById('mobile-menu');
+            isOpen ? menu.classList.add('open') : menu.classList.remove('open');
+        }
 
-            // Render Products
-            const prodGrid = document.getElementById('product-grid');
-            prodGrid.innerHTML = products.map(prod => `
+        function toggleAuthMode() {
+            isSignUp = !isSignUp;
+            document.getElementById('auth-title').innerHTML = isSignUp ? 'JOIN THE<br/><span class="text-[#FFEE00]">COLLECTIVE</span>' : 'MEMBER<br/><span class="text-[#FFEE00]">ACCESS</span>';
+            document.getElementById('auth-subtitle').innerText = isSignUp ? 'Create your account to join.' : 'Enter your credentials to continue.';
+            document.getElementById('auth-action').value = isSignUp ? 'signup' : 'login';
+            document.getElementById('auth-submit-btn').innerText = isSignUp ? 'Join Now' : 'Sign In';
+            document.getElementById('auth-switch-text').innerText = isSignUp ? 'Already a member?' : 'Not a member?';
+            document.getElementById('auth-switch-btn').innerText = isSignUp ? 'Sign In' : 'Join the Collective';
+            document.getElementById('signup-name-field').classList.toggle('hidden', !isSignUp);
+        }
+
+        // Render Helpers
+        function createProductCard(product) {
+            return `
                 <div class="group cursor-pointer">
                     <div class="relative aspect-[3/4] overflow-hidden bg-zinc-900 mb-4">
-                        <img src="${prod.image}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                        <img src="${product.image}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-80">
                         <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button class="bg-white text-black p-2 rounded-full hover:bg-[#FFEE00] transition-colors">
-                                <i data-lucide="heart" size="18"></i>
-                            </button>
+                            <button class="bg-white text-black p-2 rounded-full hover:bg-[#FFEE00]"><i data-lucide="heart" size="18"></i></button>
                         </div>
                         <div class="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                            <button class="w-full bg-[#FFEE00] text-black py-3 font-black uppercase text-xs tracking-tighter flex items-center justify-center gap-2">
+                            <button onclick="addToCart('${product.id}')" class="w-full bg-[#FFEE00] text-black py-3 font-black uppercase text-xs tracking-tighter flex items-center justify-center gap-2">
                                 Add to Cart <i data-lucide="shopping-bag" size="14"></i>
                             </button>
                         </div>
                     </div>
                     <div class="space-y-1 px-1">
-                        <p class="text-[10px] text-[#FFEE00] font-black uppercase tracking-[0.2em]">${prod.category}</p>
-                        <h4 class="font-bold text-sm md:text-base leading-tight group-hover:text-[#FFEE00] transition-colors uppercase">${prod.name}</h4>
-                        <p class="text-gray-400 font-mono text-sm">${prod.price}</p>
+                        <p class="text-[10px] text-[#FFEE00] font-black uppercase tracking-[0.2em]">${product.category}</p>
+                        <h4 class="font-bold text-sm md:text-base uppercase">${product.name}</h4>
+                        <p class="text-gray-400 font-mono text-sm">${product.price}</p>
                     </div>
                 </div>
-            `).join('');
+            `;
+        }
 
-            // Initialize Icons
+        function renderCollection(viewId) {
+            const titleMap = {
+                new_drop: 'New Drop',
+                men: 'Men',
+                women: 'Women',
+                sale: 'Sale',
+                outerwear: 'Outerwear',
+                streetwear: 'Streetwear',
+                accessories: 'Accessories',
+                essentials: 'All Essentials'
+            };
+            document.getElementById('collection-title').innerText = titleMap[viewId] || 'Collection';
+            document.getElementById('collection-grid').innerHTML = placeholders.map(p => createProductCard(p)).join('');
             lucide.createIcons();
         }
 
-        window.onload = init;
+        function handleSearch(query) {
+            const grid = document.getElementById('search-results-grid');
+            if (!query) { grid.innerHTML = ''; return; }
+            const filtered = allInventory.filter(item => item.name.toLowerCase().includes(query.toLowerCase()));
+            grid.innerHTML = filtered.length ? filtered.map(i => createProductCard(i)).join('') : '<p class="col-span-full text-zinc-500 uppercase font-black">No results found.</p>';
+            lucide.createIcons();
+        }
+
+        function addToCart(productId) {
+            const product = allInventory.find(i => i.id === productId);
+            if (product) {
+                cart.push({ ...product, cartId: Date.now() });
+                updateCartUI();
+            }
+        }
+
+        function removeFromCart(cartId) {
+            cart = cart.filter(i => i.cartId !== cartId);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            document.getElementById('cart-count').innerText = cart.length;
+            const container = document.getElementById('cart-items-container');
+            const footer = document.getElementById('cart-footer');
+            
+            if (cart.length === 0) {
+                container.innerHTML = `<div class="py-20 text-center border border-white/5 bg-zinc-950"><p class="text-zinc-500 uppercase font-black">Your bag is empty.</p></div>`;
+                footer.classList.add('hidden');
+            } else {
+                container.innerHTML = cart.map(item => `
+                    <div class="flex gap-6 items-center border-b border-white/5 pb-6">
+                        <div class="w-20 h-24 bg-zinc-900 overflow-hidden"><img src="${item.image}" class="w-full h-full object-cover"></div>
+                        <div class="flex-grow">
+                            <h4 class="font-bold uppercase tracking-tight">${item.name}</h4>
+                            <p class="text-zinc-500 font-mono text-sm">${item.price}</p>
+                        </div>
+                        <button onclick="removeFromCart(${item.cartId})" class="text-zinc-500 hover:text-red-500"><i data-lucide="trash-2" size="20"></i></button>
+                    </div>
+                `).join('');
+                footer.classList.remove('hidden');
+                const total = cart.reduce((acc, curr) => acc + parseInt(curr.price.replace('$', '')), 0);
+                document.getElementById('cart-total').innerText = `$${total}.00`;
+            }
+            lucide.createIcons();
+        }
+
+        // Init
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            window.scrollY > 20 ? nav.classList.add('scrolled') : nav.classList.remove('scrolled');
+        });
+
+        window.onload = () => {
+            document.getElementById('essentials-preview-grid').innerHTML = essentials.map(e => createProductCard(e)).join('');
+            lucide.createIcons();
+            updateCartUI();
+        };
     </script>
 </body>
 </html>
