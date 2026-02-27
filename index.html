@@ -225,7 +225,7 @@
         </section>
 
         <!-- Collection / Category View -->
-        <section id="view-collection" class="view-section py-32 px-6 max-w-7xl mx-auto">
+        <section id="view-collection" class="view-section py-32 px-6 max-w-7xl mx-auto min-h-screen">
             <h2 id="collection-title" class="text-5xl font-black uppercase tracking-tighter mb-4">COLLECTION</h2>
             <div class="w-20 h-2 bg-[#FFEE00] mb-12"></div>
             <div id="collection-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
@@ -484,8 +484,11 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
                     <!-- Images -->
                     <div class="space-y-6">
-                        <div class="aspect-[3/4] bg-zinc-900 overflow-hidden">
+                        <div class="relative aspect-[3/4] bg-zinc-900 overflow-hidden cursor-pointer group/mainimg" onclick="toggleProductImage('${product.imgFront}', '${product.imgBack}')">
                             <img src="${product.imgFront}" id="main-product-img" class="w-full h-full object-cover transition-opacity duration-500">
+                            <div class="absolute bottom-4 right-4 bg-black/50 backdrop-blur-md p-3 rounded-full opacity-0 group-hover/mainimg:opacity-100 transition-opacity">
+                                <i data-lucide="refresh-cw" class="text-white" size="20"></i>
+                            </div>
                         </div>
                         <div class="flex gap-4">
                             <button onclick="document.getElementById('main-product-img').src='${product.imgFront}'" class="w-20 aspect-[3/4] bg-zinc-900 overflow-hidden border border-white/10 hover:border-[#FFEE00]">
@@ -542,6 +545,15 @@
                 </div>
             `;
             lucide.createIcons();
+        }
+
+        function toggleProductImage(front, back) {
+            const img = document.getElementById('main-product-img');
+            if (img.src.includes(front)) {
+                img.src = back;
+            } else {
+                img.src = front;
+            }
         }
 
         function handleSearch(query) {
