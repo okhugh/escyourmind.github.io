@@ -455,14 +455,25 @@
 
         const productDesc = "Silence the noise. Step out of the cycle.\nOur signature hoodie is designed as a physical reminder to detach yourself from any thoughts or internal dialogue that limits your endless potential. With its heavyweight build that provides a sense of security and oversized fit that provides a sense of utmost comfort, this is more than a garment—it's a sanctuary.";
 
+        // Persistence Helpers
+        function saveProgress() {
+            localStorage.setItem('oa_cart', JSON.stringify(cart));
+            localStorage.setItem('oa_wishlist', JSON.stringify(wishlist));
+        }
+
+        function loadProgress() {
+            const savedCart = localStorage.getItem('oa_cart');
+            const savedWishlist = localStorage.getItem('oa_wishlist');
+            
+            if (savedCart) cart = JSON.parse(savedCart);
+            if (savedWishlist) wishlist = JSON.parse(savedWishlist);
+        }
+
         // Core Functions
         function navigateTo(viewId, productId = null, saveToHistory = true) {
-            // Track history
             if (saveToHistory && currentView !== viewId) {
                 viewHistory.push({ view: currentView, id: currentProductId });
             }
-
-            // If navigating to home, clear history to prevent back-looping
             if (viewId === 'home') viewHistory = [];
 
             document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
@@ -533,6 +544,7 @@
                 if (product) {
                     cart.push({ ...product, size: size, cartId: Date.now() });
                     updateCartUI();
+                    saveProgress();
                     showNotification(`${product.name} (${size}) Added to Bag`);
                 }
             }
@@ -557,7 +569,6 @@
                                 Add to Bag <i data-lucide="shopping-bag" size="14"></i>
                             </button>
                         </div>
-                        <!-- Mobile Always Visible "Add" -->
                         <div class="md:hidden absolute bottom-2 right-2">
                              <button onclick="event.stopPropagation(); openSizeModal('${product.id}')" class="bg-[#FFEE00] text-black p-2 rounded-full shadow-lg">
                                 <i data-lucide="plus" size="20"></i>
@@ -587,10 +598,8 @@
                 accessories: 'Accessories',
                 essentials: 'All Essentials'
             };
-            
             const titleElement = document.getElementById('collection-title');
             const gridElement = document.getElementById('collection-grid');
-            
             titleElement.innerText = titleMap[viewId] || 'Collection';
             
             if (viewId === 'accessories') {
@@ -606,7 +615,6 @@
                 gridElement.classList.add('grid');
                 gridElement.innerHTML = collection.map(p => createProductCard(p)).join('');
             }
-            
             lucide.createIcons();
         }
 
@@ -638,7 +646,6 @@
                     <i data-lucide="chevron-left" size="14"></i> Back
                 </button>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
-                    <!-- Images - Optimized for 1400x1400 -->
                     <div class="space-y-6">
                         <div class="relative aspect-square bg-zinc-900 overflow-hidden cursor-pointer group/mainimg" onclick="toggleProductImage('${product.imgFront}', '${product.imgBack}')">
                             <img src="${product.imgFront}" id="main-product-img" class="w-full h-full object-cover transition-opacity duration-500">
@@ -656,7 +663,6 @@
                         </div>
                     </div>
 
-                    <!-- Info -->
                     <div class="flex flex-col">
                         <div class="flex justify-between items-start mb-4">
                             <p class="text-[#FFEE00] font-black uppercase tracking-[0.3em]">${product.category} COLLECTION</p>
@@ -690,7 +696,6 @@
                                 <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-4">The Vision</p>
                                 <p class="text-zinc-300 leading-relaxed font-medium italic text-sm md:text-base">${productDesc.replace(/\n/g, '<br/>')}</p>
                             </div>
-                            
                             <div class="grid grid-cols-2 gap-8 pt-8 border-t border-white/5">
                                 <div>
                                     <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-2">Material</p>
@@ -728,9 +733,9 @@
             if (product) {
                 cart.push({ ...product, size: selectedDetailSize, cartId: Date.now() });
                 updateCartUI();
+                saveProgress();
                 showNotification(`Added to Bag (${selectedDetailSize})`);
                 selectedDetailSize = null;
-                // Reset buttons
                 document.querySelectorAll('#size-selector-detail button').forEach(b => {
                     b.classList.remove('bg-[#FFEE00]', 'text-black', 'border-[#FFEE00]');
                     b.classList.add('border-white/10');
@@ -751,7 +756,8 @@
             }
             
             updateWishlistBadge();
-            // If in current collection/wishlist view, re-render to update icon
+            saveProgress();
+            
             if (currentView === 'wishlist') renderWishlist();
             else if (['new_drop', 'men', 'women', 'sale', 'outerwear', 'streetwear', 'accessories', 'essentials'].includes(currentView)) renderCollection(currentView);
             else if (currentView === 'product_detail') renderProductDetail(productId);
@@ -791,11 +797,9 @@
             const notif = document.getElementById('add-notification');
             const text = document.getElementById('notif-text');
             text.innerText = textMsg || `Added to Bag`;
-            
             notif.classList.add('show');
             const cartBtn = document.getElementById('cart-nav-btn');
             cartBtn.classList.add('cart-pop-active');
-            
             setTimeout(() => {
                 notif.classList.remove('show');
                 cartBtn.classList.remove('cart-pop-active');
@@ -805,13 +809,13 @@
         function removeFromCart(cartId) {
             cart = cart.filter(i => i.cartId !== cartId);
             updateCartUI();
+            saveProgress();
         }
 
         function updateCartUI() {
             document.getElementById('cart-count').innerText = cart.length;
             const container = document.getElementById('cart-items-container');
             const footer = document.getElementById('cart-footer');
-            
             if (cart.length === 0) {
                 container.innerHTML = `<div class="py-20 text-center border border-white/5 bg-zinc-950"><p class="text-zinc-500 uppercase font-black">Your bag is empty.</p></div>`;
                 footer.classList.add('hidden');
@@ -840,7 +844,7 @@
         });
 
         window.onload = () => {
-            // Fill Essentials Preview with high quality items
+            loadProgress();
             document.getElementById('essentials-preview-grid').innerHTML = collection.slice(0, 4).map(e => createProductCard(e)).join('');
             lucide.createIcons();
             updateCartUI();
