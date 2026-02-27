@@ -123,7 +123,7 @@
                     <button onclick="navigateTo('new_drop')" class="hover:text-[#FFEE00] transition-colors">New Drop</button>
                     <button onclick="navigateTo('men')" class="hover:text-[#FFEE00] transition-colors">Men</button>
                     <button onclick="navigateTo('women')" class="hover:text-[#FFEE00] transition-colors">Women</button>
-                    <button onclick="navigateTo('sale')" class="hover:text-[#FFEE00] transition-colors">Sale</button>
+                    <button onclick="navigateTo('sale')" class="hover:text-[#FFEE00] transition-colors text-[#FFEE00]">Sale</button>
                 </div>
             </div>
 
@@ -149,12 +149,12 @@
             <h1 class="text-xl font-black uppercase">ESCAPE<span class="text-[#FFEE00]">YOUR</span>MIND</h1>
             <button onclick="toggleMenu(false)"><i data-lucide="x" size="32"></i></button>
         </div>
-        <div class="flex flex-col gap-8 text-4xl font-black uppercase">
-            <button onclick="navigateTo('home'); toggleMenu(false)" class="text-left text-[#FFEE00]">Home</button>
-            <button onclick="navigateTo('new_drop'); toggleMenu(false)" class="text-left">New Drop</button>
-            <button onclick="navigateTo('men'); toggleMenu(false)" class="text-left">Men</button>
-            <button onclick="navigateTo('women'); toggleMenu(false)" class="text-left">Women</button>
-            <button onclick="navigateTo('sale'); toggleMenu(false)" class="text-left">Sale</button>
+        <div class="flex flex-col gap-8 text-4xl font-black uppercase text-left">
+            <button onclick="navigateTo('home'); toggleMenu(false)" class="text-[#FFEE00]">Home</button>
+            <button onclick="navigateTo('new_drop'); toggleMenu(false)">New Drop</button>
+            <button onclick="navigateTo('men'); toggleMenu(false)">Men</button>
+            <button onclick="navigateTo('women'); toggleMenu(false)">Women</button>
+            <button onclick="navigateTo('sale'); toggleMenu(false)">Sale</button>
         </div>
     </div>
 
@@ -179,27 +179,27 @@
 
             <!-- Categories Grid -->
             <section class="py-24 max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div onclick="navigateTo('outerwear')" class="group relative h-80 overflow-hidden cursor-pointer">
-                    <img src="https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-80" />
+                <div onclick="navigateTo('outerwear')" class="group relative aspect-square overflow-hidden cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&q=80&w=1400" class="w-full h-full object-cover opacity-80" />
                     <div class="absolute inset-0 bg-black/40"></div>
                     <div class="absolute bottom-8 left-8">
-                        <h3 class="text-2xl font-black uppercase">Outerwear</h3>
+                        <h3 class="text-2xl font-black uppercase text-white">Outerwear</h3>
                         <div class="w-12 h-1 bg-[#FFEE00] mt-2 group-hover:w-full transition-all duration-500"></div>
                     </div>
                 </div>
-                <div onclick="navigateTo('streetwear')" class="group relative h-80 overflow-hidden cursor-pointer">
-                    <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-80" />
+                <div onclick="navigateTo('streetwear')" class="group relative aspect-square overflow-hidden cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=1400" class="w-full h-full object-cover opacity-80" />
                     <div class="absolute inset-0 bg-black/40"></div>
                     <div class="absolute bottom-8 left-8">
-                        <h3 class="text-2xl font-black uppercase">Streetwear</h3>
+                        <h3 class="text-2xl font-black uppercase text-white">Streetwear</h3>
                         <div class="w-12 h-1 bg-[#FFEE00] mt-2 group-hover:w-full transition-all duration-500"></div>
                     </div>
                 </div>
-                <div onclick="navigateTo('accessories')" class="group relative h-80 overflow-hidden cursor-pointer">
-                    <img src="https://images.unsplash.com/photo-1509100194014-d49809396daa?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-80" />
+                <div onclick="navigateTo('accessories')" class="group relative aspect-square overflow-hidden cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1509100194014-d49809396daa?auto=format&fit=crop&q=80&w=1400" class="w-full h-full object-cover opacity-80" />
                     <div class="absolute inset-0 bg-black/40"></div>
                     <div class="absolute bottom-8 left-8">
-                        <h3 class="text-2xl font-black uppercase">Accessories</h3>
+                        <h3 class="text-2xl font-black uppercase text-white">Accessories</h3>
                         <div class="w-12 h-1 bg-[#FFEE00] mt-2 group-hover:w-full transition-all duration-500"></div>
                     </div>
                 </div>
@@ -346,7 +346,7 @@
         let cart = [];
         let isSignUp = false;
 
-        // Inventory
+        // Inventory - 1400x1400 High Quality
         const collection = [
             { 
                 id: 'h1', 
@@ -435,7 +435,7 @@
         function createProductCard(product) {
             return `
                 <div class="group cursor-pointer" onclick="navigateTo('product_detail', '${product.id}')">
-                    <div class="relative aspect-[3/4] overflow-hidden bg-zinc-900 mb-4 product-image-container">
+                    <div class="relative aspect-square overflow-hidden bg-zinc-900 mb-4 product-image-container">
                         <img src="${product.imgFront}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-80" loading="lazy">
                         <img src="${product.imgBack}" class="absolute inset-0 w-full h-full object-cover secondary-image opacity-0 group-hover:opacity-80 transition-opacity duration-500">
                         <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -471,6 +471,7 @@
                 essentials: 'All Essentials'
             };
             document.getElementById('collection-title').innerText = titleMap[viewId] || 'Collection';
+            // Each category contains the 5 hoodies
             document.getElementById('collection-grid').innerHTML = collection.map(p => createProductCard(p)).join('');
             lucide.createIcons();
         }
@@ -482,19 +483,19 @@
             const container = document.getElementById('view-product-detail');
             container.innerHTML = `
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
-                    <!-- Images -->
+                    <!-- Images - Optimized for 1400x1400 -->
                     <div class="space-y-6">
-                        <div class="relative aspect-[3/4] bg-zinc-900 overflow-hidden cursor-pointer group/mainimg" onclick="toggleProductImage('${product.imgFront}', '${product.imgBack}')">
+                        <div class="relative aspect-square bg-zinc-900 overflow-hidden cursor-pointer group/mainimg" onclick="toggleProductImage('${product.imgFront}', '${product.imgBack}')">
                             <img src="${product.imgFront}" id="main-product-img" class="w-full h-full object-cover transition-opacity duration-500">
                             <div class="absolute bottom-4 right-4 bg-black/50 backdrop-blur-md p-3 rounded-full opacity-0 group-hover/mainimg:opacity-100 transition-opacity">
                                 <i data-lucide="refresh-cw" class="text-white" size="20"></i>
                             </div>
                         </div>
                         <div class="flex gap-4">
-                            <button onclick="document.getElementById('main-product-img').src='${product.imgFront}'" class="w-20 aspect-[3/4] bg-zinc-900 overflow-hidden border border-white/10 hover:border-[#FFEE00]">
+                            <button onclick="document.getElementById('main-product-img').src='${product.imgFront}'" class="w-20 aspect-square bg-zinc-900 overflow-hidden border border-white/10 hover:border-[#FFEE00]">
                                 <img src="${product.imgFront}" class="w-full h-full object-cover opacity-60 hover:opacity-100">
                             </button>
-                            <button onclick="document.getElementById('main-product-img').src='${product.imgBack}'" class="w-20 aspect-[3/4] bg-zinc-900 overflow-hidden border border-white/10 hover:border-[#FFEE00]">
+                            <button onclick="document.getElementById('main-product-img').src='${product.imgBack}'" class="w-20 aspect-square bg-zinc-900 overflow-hidden border border-white/10 hover:border-[#FFEE00]">
                                 <img src="${product.imgBack}" class="w-full h-full object-cover opacity-60 hover:opacity-100">
                             </button>
                         </div>
@@ -604,7 +605,7 @@
             } else {
                 container.innerHTML = cart.map(item => `
                     <div class="flex gap-6 items-center border-b border-white/5 pb-6">
-                        <div class="w-20 h-24 bg-zinc-900 overflow-hidden"><img src="${item.imgFront}" class="w-full h-full object-cover"></div>
+                        <div class="w-20 h-20 bg-zinc-900 overflow-hidden"><img src="${item.imgFront}" class="w-full h-full object-cover"></div>
                         <div class="flex-grow">
                             <h4 class="font-bold uppercase tracking-tight text-sm">${item.name}</h4>
                             <p class="text-zinc-500 font-mono text-sm">${item.price}</p>
@@ -626,7 +627,8 @@
         });
 
         window.onload = () => {
-            document.getElementById('essentials-preview-grid').innerHTML = collection.map(e => createProductCard(e)).join('');
+            // Fill Essentials Preview with high quality items
+            document.getElementById('essentials-preview-grid').innerHTML = collection.slice(0, 4).map(e => createProductCard(e)).join('');
             lucide.createIcons();
             updateCartUI();
         };
