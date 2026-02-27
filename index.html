@@ -97,6 +97,12 @@
             opacity: 0;
             transition: opacity 0.5s ease;
         }
+
+        /* Size Modal Overlay */
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+        }
     </style>
 </head>
 <body class="custom-scroll">
@@ -109,14 +115,33 @@
         </div>
     </div>
 
+    <!-- Size Selection Modal -->
+    <div id="size-modal" class="fixed inset-0 z-[110] flex items-center justify-center p-6 hidden">
+        <div class="absolute inset-0 modal-overlay" onclick="closeSizeModal()"></div>
+        <div class="relative bg-zinc-950 border border-white/10 p-8 max-w-sm w-full text-center">
+            <h3 class="text-xl font-black uppercase tracking-tighter mb-2">Select Size</h3>
+            <p id="size-modal-product-name" class="text-[10px] text-zinc-500 uppercase font-black mb-8"></p>
+            
+            <div class="grid grid-cols-3 gap-3 mb-8">
+                <button onclick="confirmQuickAdd('S')" class="h-12 border border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase">S</button>
+                <button onclick="confirmQuickAdd('M')" class="h-12 border border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase">M</button>
+                <button onclick="confirmQuickAdd('L')" class="h-12 border border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase">L</button>
+                <button onclick="confirmQuickAdd('XL')" class="h-12 border border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase">XL</button>
+                <button onclick="confirmQuickAdd('2XL')" class="h-12 border border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase col-span-2">2XL</button>
+            </div>
+            
+            <button onclick="closeSizeModal()" class="text-zinc-500 uppercase font-black text-[10px] tracking-widest hover:text-white">Cancel</button>
+        </div>
+    </div>
+
     <!-- Navigation -->
-    <nav id="navbar" class="fixed w-full z-50 nav-transition py-6 px-6">
+    <nav id="navbar" class="fixed w-full z-50 nav-transition py-4 md:py-6 px-4 md:px-6">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-8">
+            <div class="flex items-center gap-4 md:gap-8">
                 <button class="lg:hidden" onclick="toggleMenu(true)">
-                    <i data-lucide="menu" size="24"></i>
+                    <i data-lucide="menu" size="22"></i>
                 </button>
-                <h1 onclick="navigateTo('home')" class="text-2xl font-black tracking-tighter uppercase cursor-pointer">
+                <h1 onclick="navigateTo('home')" class="text-lg md:text-2xl font-black tracking-tighter uppercase cursor-pointer">
                     ESCAPE<span class="text-[#FFEE00]">YOUR</span>MIND
                 </h1>
                 <div class="hidden lg:flex gap-6 text-sm font-medium uppercase tracking-widest text-gray-400">
@@ -127,13 +152,17 @@
                 </div>
             </div>
 
-            <div class="flex items-center gap-5">
+            <div class="flex items-center gap-3 md:gap-5">
                 <button onclick="navigateTo('search')" class="hover:text-[#FFEE00] transition-colors">
                     <i data-lucide="search" size="20"></i>
                 </button>
+                <button onclick="navigateTo('wishlist')" class="hover:text-[#FFEE00] transition-colors relative">
+                    <i data-lucide="heart" size="20"></i>
+                    <span id="wishlist-count" class="absolute -top-1 -right-1 bg-white text-black text-[8px] font-bold h-3 w-3 rounded-full flex items-center justify-center hidden">0</span>
+                </button>
                 <button onclick="navigateTo('login')" class="flex items-center gap-2 hover:text-[#FFEE00] transition-colors group">
                     <i data-lucide="user" size="20"></i>
-                    <span class="text-xs font-bold uppercase tracking-tighter hidden md:block">Login</span>
+                    <span class="text-xs font-bold uppercase tracking-tighter hidden lg:block">Login</span>
                 </button>
                 <button id="cart-nav-btn" onclick="navigateTo('cart')" class="relative group">
                     <i data-lucide="shopping-bag" size="20" class="group-hover:text-[#FFEE00] transition-colors"></i>
@@ -155,6 +184,7 @@
             <button onclick="navigateTo('men'); toggleMenu(false)">Men</button>
             <button onclick="navigateTo('women'); toggleMenu(false)">Women</button>
             <button onclick="navigateTo('sale'); toggleMenu(false)">Sale</button>
+            <button onclick="navigateTo('wishlist'); toggleMenu(false)">Wishlist</button>
         </div>
     </div>
 
@@ -168,10 +198,10 @@
                     <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=2000" class="w-full h-full object-cover opacity-60 grayscale" alt="Hero">
                     <div class="absolute inset-0 hero-gradient"></div>
                 </div>
-                <div class="relative z-10 max-w-7xl mx-auto px-6 w-full mt-20">
-                    <p class="text-[#FFEE00] font-bold uppercase tracking-[0.3em] mb-4 text-sm animate-pulse">F/W 2026 DROP NOW LIVE</p>
-                    <h2 class="text-6xl md:text-9xl font-black uppercase leading-[0.85] mb-8 tracking-tighter">LUCID<br /><span class="text-[#FFEE00]">BODY.</span></h2>
-                    <button onclick="navigateTo('new_drop')" class="bg-[#FFEE00] text-black px-10 py-5 font-black uppercase tracking-tighter hover:bg-white transition-all transform hover:-translate-y-1 flex items-center gap-2 group">
+                <div class="relative z-10 max-w-7xl mx-auto px-6 w-full mt-20 text-center md:text-left">
+                    <p class="text-[#FFEE00] font-bold uppercase tracking-[0.3em] mb-4 text-xs md:text-sm animate-pulse">F/W 2026 DROP NOW LIVE</p>
+                    <h2 class="text-5xl md:text-9xl font-black uppercase leading-[0.85] mb-8 tracking-tighter">LUCID<br /><span class="text-[#FFEE00]">BODY.</span></h2>
+                    <button onclick="navigateTo('new_drop')" class="bg-[#FFEE00] text-black px-10 py-5 font-black uppercase tracking-tighter hover:bg-white transition-all transform hover:-translate-y-1 flex items-center gap-2 group mx-auto md:mx-0">
                         Shop Collection <i data-lucide="arrow-right" size="20"></i>
                     </button>
                 </div>
@@ -210,14 +240,14 @@
                 <div class="max-w-7xl mx-auto px-6">
                     <div class="flex justify-between items-end mb-12">
                         <div>
-                            <h2 class="text-4xl font-black uppercase">The Essentials</h2>
+                            <h2 class="text-4xl font-black uppercase tracking-tighter">The Essentials</h2>
                             <p class="text-gray-500 mt-2 font-medium tracking-wide">Wearable reminders to exit your head and enter the moment.</p>
                         </div>
                         <button onclick="navigateTo('essentials')" class="flex items-center gap-2 text-[#FFEE00] font-bold uppercase tracking-tighter hover:text-white transition-colors">
                             Browse All <i data-lucide="chevron-right" size="18"></i>
                         </button>
                     </div>
-                    <div id="essentials-preview-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div id="essentials-preview-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
                         <!-- Filled by JS -->
                     </div>
                 </div>
@@ -225,44 +255,56 @@
         </section>
 
         <!-- Collection / Category View -->
-        <section id="view-collection" class="view-section py-32 px-6 max-w-7xl mx-auto min-h-screen">
+        <section id="view-collection" class="view-section py-32 px-4 md:px-6 max-w-7xl mx-auto min-h-screen">
             <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-500 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-8 transition-colors">
                 <i data-lucide="chevron-left" size="14"></i> Back
             </button>
-            <h2 id="collection-title" class="text-5xl font-black uppercase tracking-tighter mb-4">COLLECTION</h2>
+            <h2 id="collection-title" class="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-4">COLLECTION</h2>
             <div class="w-20 h-2 bg-[#FFEE00] mb-12"></div>
-            <div id="collection-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
+            <div id="collection-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-x-4 md:gap-x-6 gap-y-10 md:gap-y-12">
                 <!-- Grid Generated by JS -->
             </div>
         </section>
 
+        <!-- Wishlist View -->
+        <section id="view-wishlist" class="view-section py-32 px-4 md:px-6 max-w-7xl mx-auto min-h-screen">
+            <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-500 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-8 transition-colors">
+                <i data-lucide="chevron-left" size="14"></i> Back
+            </button>
+            <h2 class="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-4">Wishlist</h2>
+            <div class="w-20 h-2 bg-[#FFEE00] mb-12"></div>
+            <div id="wishlist-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-x-4 md:gap-x-6 gap-y-10 md:gap-y-12">
+                <!-- Wishlist Items -->
+            </div>
+        </section>
+
         <!-- Product Detail View -->
-        <section id="view-product-detail" class="view-section py-32 px-6 max-w-7xl mx-auto min-h-screen">
+        <section id="view-product-detail" class="view-section py-32 px-4 md:px-6 max-w-7xl mx-auto min-h-screen">
             <!-- Dynamic Content -->
         </section>
 
         <!-- Search View -->
-        <section id="view-search" class="view-section py-32 px-6 max-w-7xl mx-auto min-h-screen">
+        <section id="view-search" class="view-section py-32 px-4 md:px-6 max-w-7xl mx-auto min-h-screen">
             <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-500 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-8 transition-colors">
                 <i data-lucide="chevron-left" size="14"></i> Back
             </button>
-            <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="SEARCH COLLECTION..." class="w-full bg-transparent border-b-2 border-white/10 pb-4 text-4xl md:text-6xl font-black uppercase tracking-tighter outline-none focus:border-[#FFEE00] transition-colors">
-            <div id="search-results-grid" class="mt-12 grid grid-cols-2 lg:grid-cols-4 gap-8"></div>
+            <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="SEARCH COLLECTION..." class="w-full bg-transparent border-b-2 border-white/10 pb-4 text-3xl md:text-6xl font-black uppercase tracking-tighter outline-none focus:border-[#FFEE00] transition-colors">
+            <div id="search-results-grid" class="mt-12 grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8"></div>
         </section>
 
         <!-- Cart View -->
-        <section id="view-cart" class="view-section py-32 px-6 max-w-3xl mx-auto min-h-screen">
+        <section id="view-cart" class="view-section py-32 px-4 md:px-6 max-w-3xl mx-auto min-h-screen">
             <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-500 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-8 transition-colors">
                 <i data-lucide="chevron-left" size="14"></i> Back
             </button>
-            <h2 class="text-5xl font-black uppercase tracking-tighter mb-12">Your Cart</h2>
+            <h2 class="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-12">Your Cart</h2>
             <div id="cart-items-container" class="space-y-6"></div>
             <div id="cart-footer" class="mt-12 pt-8 border-t border-white/10 flex justify-between items-end hidden">
                 <div>
                     <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest">Total Amount</p>
-                    <p id="cart-total" class="text-4xl font-black text-[#FFEE00]">$0.00</p>
+                    <p id="cart-total" class="text-3xl md:text-4xl font-black text-[#FFEE00]">$0.00</p>
                 </div>
-                <button class="bg-[#FFEE00] text-black px-12 py-5 font-black uppercase tracking-tighter hover:bg-white transition-colors">Checkout</button>
+                <button class="bg-[#FFEE00] text-black px-10 md:px-12 py-5 font-black uppercase tracking-tighter hover:bg-white transition-colors">Checkout</button>
             </div>
         </section>
 
@@ -273,7 +315,7 @@
                     <i data-lucide="chevron-left" size="14"></i> Back
                 </button>
                 <div class="text-center mb-12">
-                    <h2 id="auth-title" class="text-5xl font-black uppercase tracking-tighter mb-4">MEMBER<br/><span class="text-[#FFEE00]">ACCESS</span></h2>
+                    <h2 id="auth-title" class="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-4">MEMBER<br/><span class="text-[#FFEE00]">ACCESS</span></h2>
                     <p id="auth-subtitle" class="text-zinc-500 font-bold tracking-widest text-xs uppercase">Enter your credentials to continue.</p>
                 </div>
                 
@@ -314,11 +356,11 @@
     <!-- Footer -->
     <footer id="main-footer" class="bg-black border-t border-white/5 pt-20 pb-10 mt-20">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20 text-center md:text-left">
                 <div>
                     <h1 class="text-2xl font-black mb-6 uppercase">ESCAPE<span class="text-[#FFEE00]">YOUR</span>MIND</h1>
                     <p class="text-gray-500 text-sm leading-relaxed mb-6 font-medium">For your confidence, by the confident. Based in Atlanta, shipping worldwide.</p>
-                    <div class="flex gap-4">
+                    <div class="flex gap-4 justify-center md:justify-start">
                         <i data-lucide="instagram" class="text-gray-400 hover:text-[#FFEE00] cursor-pointer"></i>
                         <i data-lucide="twitter" class="text-gray-400 hover:text-[#FFEE00] cursor-pointer"></i>
                         <i data-lucide="facebook" class="text-gray-400 hover:text-[#FFEE00] cursor-pointer"></i>
@@ -342,13 +384,13 @@
                 </div>
                 <div class="bg-zinc-900 p-6 border border-white/5">
                     <h4 class="font-black uppercase tracking-widest text-[10px] text-[#FFEE00] mb-4">Status</h4>
-                    <div class="flex items-center gap-2 mb-2">
+                    <div class="flex items-center gap-2 mb-2 justify-center md:justify-start">
                         <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
                         <span class="text-[10px] font-black uppercase">Logistics Normal</span>
                     </div>
                 </div>
             </div>
-            <p class="text-[10px] font-bold text-gray-600 tracking-widest uppercase text-center md:text-left">© 2026 Escape Your Mind Collective. All Rights Reserved.</p>
+            <p class="text-[10px] font-bold text-gray-600 tracking-widest uppercase text-center">© 2026 Escape Your Mind Collective. All Rights Reserved.</p>
         </div>
     </footer>
 
@@ -357,8 +399,10 @@
         let currentView = 'home';
         let currentProductId = null;
         let cart = [];
+        let wishlist = [];
         let isSignUp = false;
         let viewHistory = [];
+        let pendingQuickAddId = null;
 
         // Inventory - 1400x1400 High Quality
         const collection = [
@@ -432,6 +476,9 @@
             } else if (['new_drop', 'men', 'women', 'sale', 'outerwear', 'streetwear', 'accessories', 'essentials'].includes(viewId)) {
                 renderCollection(viewId);
                 document.getElementById('view-collection').classList.add('active');
+            } else if (viewId === 'wishlist') {
+                renderWishlist();
+                document.getElementById('view-wishlist').classList.add('active');
             } else {
                 document.getElementById(`view-${viewId}`).classList.add('active');
             }
@@ -465,26 +512,62 @@
             document.getElementById('signup-name-field').classList.toggle('hidden', !isSignUp);
         }
 
+        // Quick Add Modal Functions
+        function openSizeModal(productId) {
+            pendingQuickAddId = productId;
+            const product = collection.find(p => p.id === productId);
+            document.getElementById('size-modal-product-name').innerText = product.name;
+            document.getElementById('size-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSizeModal() {
+            document.getElementById('size-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            pendingQuickAddId = null;
+        }
+
+        function confirmQuickAdd(size) {
+            if (pendingQuickAddId) {
+                const product = collection.find(p => p.id === pendingQuickAddId);
+                if (product) {
+                    cart.push({ ...product, size: size, cartId: Date.now() });
+                    updateCartUI();
+                    showNotification(`${product.name} (${size}) Added to Bag`);
+                }
+            }
+            closeSizeModal();
+        }
+
         // Render Helpers
         function createProductCard(product) {
+            const inWishlist = wishlist.some(item => item.id === product.id);
             return `
                 <div class="group cursor-pointer" onclick="navigateTo('product_detail', '${product.id}')">
                     <div class="relative aspect-square overflow-hidden bg-zinc-900 mb-4 product-image-container">
                         <img src="${product.imgFront}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-80" loading="lazy">
                         <img src="${product.imgBack}" class="absolute inset-0 w-full h-full object-cover secondary-image opacity-0 group-hover:opacity-80 transition-opacity duration-500">
-                        <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button onclick="event.stopPropagation();" class="bg-white text-black p-2 rounded-full hover:bg-[#FFEE00]"><i data-lucide="heart" size="18"></i></button>
+                        <div class="absolute top-4 right-4 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+                            <button onclick="event.stopPropagation(); toggleWishlist('${product.id}')" class="bg-white text-black p-2 rounded-full hover:bg-[#FFEE00] shadow-xl">
+                                <i data-lucide="heart" size="18" class="${inWishlist ? 'fill-black' : ''}"></i>
+                            </button>
                         </div>
-                        <div class="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                            <button onclick="event.stopPropagation(); addToCart('${product.id}')" class="w-full bg-[#FFEE00] text-black py-3 font-black uppercase text-xs tracking-tighter flex items-center justify-center gap-2">
-                                Add to Cart <i data-lucide="shopping-bag" size="14"></i>
+                        <div class="absolute bottom-0 left-0 right-0 p-4 translate-y-full md:group-hover:translate-y-0 transition-transform duration-300">
+                            <button onclick="event.stopPropagation(); openSizeModal('${product.id}')" class="w-full bg-[#FFEE00] text-black py-3 font-black uppercase text-[10px] tracking-tighter flex items-center justify-center gap-2">
+                                Add to Bag <i data-lucide="shopping-bag" size="14"></i>
+                            </button>
+                        </div>
+                        <!-- Mobile Always Visible "Add" -->
+                        <div class="md:hidden absolute bottom-2 right-2">
+                             <button onclick="event.stopPropagation(); openSizeModal('${product.id}')" class="bg-[#FFEE00] text-black p-2 rounded-full shadow-lg">
+                                <i data-lucide="plus" size="20"></i>
                             </button>
                         </div>
                     </div>
                     <div class="space-y-1 px-1">
-                        <p class="text-[10px] text-[#FFEE00] font-black uppercase tracking-[0.2em]">${product.category}</p>
-                        <h4 class="font-bold text-sm md:text-base uppercase group-hover:text-[#FFEE00] transition-colors leading-tight">${product.name}</h4>
-                        <p class="font-mono text-sm">
+                        <p class="text-[8px] text-[#FFEE00] font-black uppercase tracking-[0.2em]">${product.category}</p>
+                        <h4 class="font-bold text-xs md:text-sm uppercase group-hover:text-[#FFEE00] transition-colors leading-tight">${product.name}</h4>
+                        <p class="font-mono text-xs">
                             <span class="line-through text-zinc-600 mr-2">${product.oldPrice}</span>
                             <span class="text-white">${product.price}</span>
                         </p>
@@ -515,7 +598,7 @@
                 gridElement.innerHTML = `
                     <div class="col-span-full py-24 text-center">
                         <i data-lucide="info" class="mx-auto mb-6 text-zinc-700" size="48"></i>
-                        <p class="text-2xl font-black uppercase tracking-tighter text-zinc-500">Whoops! Nothing here yet, check back later.</p>
+                        <p class="text-xl md:text-2xl font-black uppercase tracking-tighter text-zinc-500 px-4">Whoops! Nothing here yet, check back later.</p>
                         <button onclick="handleBack()" class="mt-8 text-[#FFEE00] uppercase font-black tracking-widest text-xs hover:underline">Go Back</button>
                     </div>
                 `;
@@ -524,6 +607,24 @@
                 gridElement.innerHTML = collection.map(p => createProductCard(p)).join('');
             }
             
+            lucide.createIcons();
+        }
+
+        function renderWishlist() {
+            const gridElement = document.getElementById('wishlist-grid');
+            if (wishlist.length === 0) {
+                gridElement.classList.remove('grid');
+                gridElement.innerHTML = `
+                    <div class="col-span-full py-24 text-center">
+                        <i data-lucide="heart" class="mx-auto mb-6 text-zinc-800" size="48"></i>
+                        <p class="text-xl md:text-2xl font-black uppercase tracking-tighter text-zinc-500">Your wishlist is empty.</p>
+                        <button onclick="navigateTo('home')" class="mt-8 text-[#FFEE00] uppercase font-black tracking-widest text-xs hover:underline">Return to Store</button>
+                    </div>
+                `;
+            } else {
+                gridElement.classList.add('grid');
+                gridElement.innerHTML = wishlist.map(p => createProductCard(p)).join('');
+            }
             lucide.createIcons();
         }
 
@@ -545,11 +646,11 @@
                                 <i data-lucide="refresh-cw" class="text-white" size="20"></i>
                             </div>
                         </div>
-                        <div class="flex gap-4">
-                            <button onclick="document.getElementById('main-product-img').src='${product.imgFront}'" class="w-20 aspect-square bg-zinc-900 overflow-hidden border border-white/10 hover:border-[#FFEE00]">
+                        <div class="flex gap-4 overflow-x-auto pb-2 custom-scroll">
+                            <button onclick="document.getElementById('main-product-img').src='${product.imgFront}'" class="w-20 min-w-[5rem] aspect-square bg-zinc-900 overflow-hidden border border-white/10 hover:border-[#FFEE00]">
                                 <img src="${product.imgFront}" class="w-full h-full object-cover opacity-60 hover:opacity-100">
                             </button>
-                            <button onclick="document.getElementById('main-product-img').src='${product.imgBack}'" class="w-20 aspect-square bg-zinc-900 overflow-hidden border border-white/10 hover:border-[#FFEE00]">
+                            <button onclick="document.getElementById('main-product-img').src='${product.imgBack}'" class="w-20 min-w-[5rem] aspect-square bg-zinc-900 overflow-hidden border border-white/10 hover:border-[#FFEE00]">
                                 <img src="${product.imgBack}" class="w-full h-full object-cover opacity-60 hover:opacity-100">
                             </button>
                         </div>
@@ -557,9 +658,14 @@
 
                     <!-- Info -->
                     <div class="flex flex-col">
-                        <p class="text-[#FFEE00] font-black uppercase tracking-[0.3em] mb-4">${product.category} COLLECTION</p>
-                        <h1 class="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-6 leading-tight">${product.name}</h1>
-                        <p class="text-3xl font-mono mb-12">
+                        <div class="flex justify-between items-start mb-4">
+                            <p class="text-[#FFEE00] font-black uppercase tracking-[0.3em]">${product.category} COLLECTION</p>
+                            <button onclick="toggleWishlist('${product.id}')" class="text-white hover:text-[#FFEE00] transition-colors">
+                                <i data-lucide="heart" size="24" class="${wishlist.some(i => i.id === product.id) ? 'fill-[#FFEE00] text-[#FFEE00]' : ''}"></i>
+                            </button>
+                        </div>
+                        <h1 class="text-3xl md:text-6xl font-black uppercase tracking-tighter mb-6 leading-tight">${product.name}</h1>
+                        <p class="text-2xl md:text-3xl font-mono mb-12">
                             <span class="line-through text-zinc-600 mr-4">${product.oldPrice}</span>
                             <span class="text-[#FFEE00]">${product.price}</span>
                         </p>
@@ -567,32 +673,32 @@
                         <div class="space-y-8 mb-12">
                             <div>
                                 <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-4">Select Size</p>
-                                <div class="flex flex-wrap gap-3">
+                                <div class="flex flex-wrap gap-3" id="size-selector-detail">
                                     ${['S', 'M', 'L', 'XL', '2XL'].map(size => `
-                                        <button class="w-16 h-16 border border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors">${size}</button>
+                                        <button onclick="selectDetailSize(this, '${size}')" class="w-14 h-14 md:w-16 md:h-16 border border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase">${size}</button>
                                     `).join('')}
                                 </div>
                             </div>
                         </div>
 
-                        <button onclick="addToCart('${product.id}')" class="w-full bg-[#FFEE00] text-black py-6 font-black uppercase tracking-tighter hover:bg-white transition-all transform hover:-translate-y-1 mb-12">
+                        <button id="add-to-bag-detail-btn" onclick="addToCartDetail('${product.id}')" class="w-full bg-[#FFEE00] text-black py-6 font-black uppercase tracking-tighter hover:bg-white transition-all transform hover:-translate-y-1 mb-12">
                             Add to bag
                         </button>
 
                         <div class="space-y-12">
                             <div>
                                 <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-4">The Vision</p>
-                                <p class="text-zinc-300 leading-relaxed font-medium italic">${productDesc.replace(/\n/g, '<br/>')}</p>
+                                <p class="text-zinc-300 leading-relaxed font-medium italic text-sm md:text-base">${productDesc.replace(/\n/g, '<br/>')}</p>
                             </div>
                             
                             <div class="grid grid-cols-2 gap-8 pt-8 border-t border-white/5">
                                 <div>
                                     <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-2">Material</p>
-                                    <p class="text-xs font-bold uppercase">100% Heavyweight Cotton</p>
+                                    <p class="text-[10px] md:text-xs font-bold uppercase">100% Heavyweight Cotton</p>
                                 </div>
                                 <div>
                                     <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-2">Print</p>
-                                    <p class="text-xs font-bold uppercase">Eco-friendly Water-based</p>
+                                    <p class="text-[10px] md:text-xs font-bold uppercase">Eco-friendly Water-based</p>
                                 </div>
                             </div>
                         </div>
@@ -600,6 +706,68 @@
                 </div>
             `;
             lucide.createIcons();
+        }
+
+        let selectedDetailSize = null;
+        function selectDetailSize(btn, size) {
+            document.querySelectorAll('#size-selector-detail button').forEach(b => {
+                b.classList.remove('bg-[#FFEE00]', 'text-black', 'border-[#FFEE00]');
+                b.classList.add('border-white/10');
+            });
+            btn.classList.add('bg-[#FFEE00]', 'text-black', 'border-[#FFEE00]');
+            btn.classList.remove('border-white/10');
+            selectedDetailSize = size;
+        }
+
+        function addToCartDetail(productId) {
+            if (!selectedDetailSize) {
+                showNotification("Please select a size");
+                return;
+            }
+            const product = collection.find(i => i.id === productId);
+            if (product) {
+                cart.push({ ...product, size: selectedDetailSize, cartId: Date.now() });
+                updateCartUI();
+                showNotification(`Added to Bag (${selectedDetailSize})`);
+                selectedDetailSize = null;
+                // Reset buttons
+                document.querySelectorAll('#size-selector-detail button').forEach(b => {
+                    b.classList.remove('bg-[#FFEE00]', 'text-black', 'border-[#FFEE00]');
+                    b.classList.add('border-white/10');
+                });
+            }
+        }
+
+        function toggleWishlist(productId) {
+            const product = collection.find(i => i.id === productId);
+            const index = wishlist.findIndex(item => item.id === productId);
+            
+            if (index === -1) {
+                wishlist.push(product);
+                showNotification("Added to Wishlist");
+            } else {
+                wishlist.splice(index, 1);
+                showNotification("Removed from Wishlist");
+            }
+            
+            updateWishlistBadge();
+            // If in current collection/wishlist view, re-render to update icon
+            if (currentView === 'wishlist') renderWishlist();
+            else if (['new_drop', 'men', 'women', 'sale', 'outerwear', 'streetwear', 'accessories', 'essentials'].includes(currentView)) renderCollection(currentView);
+            else if (currentView === 'product_detail') renderProductDetail(productId);
+            else if (currentView === 'home') document.getElementById('essentials-preview-grid').innerHTML = collection.slice(0, 4).map(e => createProductCard(e)).join('');
+            
+            lucide.createIcons();
+        }
+
+        function updateWishlistBadge() {
+            const badge = document.getElementById('wishlist-count');
+            if (wishlist.length > 0) {
+                badge.innerText = wishlist.length;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
         }
 
         function toggleProductImage(front, back) {
@@ -619,10 +787,10 @@
             lucide.createIcons();
         }
 
-        function showNotification(itemName) {
+        function showNotification(textMsg) {
             const notif = document.getElementById('add-notification');
             const text = document.getElementById('notif-text');
-            text.innerText = `Added to Bag`;
+            text.innerText = textMsg || `Added to Bag`;
             
             notif.classList.add('show');
             const cartBtn = document.getElementById('cart-nav-btn');
@@ -632,15 +800,6 @@
                 notif.classList.remove('show');
                 cartBtn.classList.remove('cart-pop-active');
             }, 2500);
-        }
-
-        function addToCart(productId) {
-            const product = collection.find(i => i.id === productId);
-            if (product) {
-                cart.push({ ...product, cartId: Date.now() });
-                updateCartUI();
-                showNotification(product.name);
-            }
         }
 
         function removeFromCart(cartId) {
@@ -658,13 +817,13 @@
                 footer.classList.add('hidden');
             } else {
                 container.innerHTML = cart.map(item => `
-                    <div class="flex gap-6 items-center border-b border-white/5 pb-6">
-                        <div class="w-20 h-20 bg-zinc-900 overflow-hidden"><img src="${item.imgFront}" class="w-full h-full object-cover"></div>
+                    <div class="flex gap-4 md:gap-6 items-center border-b border-white/5 pb-6">
+                        <div class="w-16 h-16 md:w-20 md:h-20 bg-zinc-900 overflow-hidden"><img src="${item.imgFront}" class="w-full h-full object-cover"></div>
                         <div class="flex-grow">
-                            <h4 class="font-bold uppercase tracking-tight text-sm">${item.name}</h4>
-                            <p class="text-zinc-500 font-mono text-sm">${item.price}</p>
+                            <h4 class="font-bold uppercase tracking-tight text-xs md:text-sm leading-tight">${item.name}</h4>
+                            <p class="text-zinc-500 font-mono text-[10px] mt-1">Size: ${item.size} — ${item.price}</p>
                         </div>
-                        <button onclick="removeFromCart(${item.cartId})" class="text-zinc-500 hover:text-red-500"><i data-lucide="trash-2" size="20"></i></button>
+                        <button onclick="removeFromCart(${item.cartId})" class="text-zinc-500 hover:text-red-500"><i data-lucide="trash-2" size="18"></i></button>
                     </div>
                 `).join('');
                 footer.classList.remove('hidden');
@@ -685,6 +844,7 @@
             document.getElementById('essentials-preview-grid').innerHTML = collection.slice(0, 4).map(e => createProductCard(e)).join('');
             lucide.createIcons();
             updateCartUI();
+            updateWishlistBadge();
         };
     </script>
 </body>
