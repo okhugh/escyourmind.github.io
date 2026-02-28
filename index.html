@@ -54,7 +54,7 @@
             border-color: #52525b !important;
         }
 
-        /* Desktop Flashlight Overlay */
+        /* Desktop Flashlight Overlay - Refined for pitch black immersion */
         #flashlight-overlay {
             position: fixed;
             top: 0;
@@ -62,13 +62,15 @@
             width: 100vw;
             height: 100vh;
             pointer-events: none;
-            z-index: 100;
+            z-index: 115;
             opacity: 0;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.6s ease;
             background: radial-gradient(
-                circle 300px at var(--flashlight-x) var(--flashlight-y),
+                circle 350px at var(--flashlight-x) var(--flashlight-y),
                 transparent 0%,
-                rgba(0, 0, 0, 0.98) 100%
+                rgba(0, 0, 0, 0.6) 40%,
+                rgba(0, 0, 0, 0.95) 80%,
+                #000000 100%
             );
         }
 
@@ -213,7 +215,7 @@
     </div>
 
     <!-- Size Selection Modal -->
-    <div id="size-modal" class="fixed inset-0 z-[110] flex items-center justify-center p-6 hidden">
+    <div id="size-modal" class="fixed inset-0 z-[140] flex items-center justify-center p-6 hidden">
         <div class="absolute inset-0 modal-overlay" onclick="closeSizeModal()"></div>
         <div class="relative bg-zinc-950 border border-white/10 p-8 max-w-sm w-full text-center shadow-2xl">
             <h3 class="text-xl font-black uppercase tracking-tighter mb-2 text-primary">Select Size</h3>
@@ -269,7 +271,7 @@
                 </button>
                 <button id="cart-nav-btn" onclick="navigateTo('cart')" class="relative group p-1">
                     <i data-lucide="shopping-bag" size="20" class="group-hover:text-[#FFEE00] transition-colors"></i>
-                    <span id="cart-count" class="absolute -top-2 -right-2 bg-[#FFEE00] text-black text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">0</span>
+                    <span id="cart-count" class="absolute -top-2 -right-2 bg-[#FFEE00] text-black text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">{cart.length}</span>
                 </button>
             </div>
         </div>
@@ -345,7 +347,7 @@
                 <div class="max-w-7xl mx-auto px-6">
                     <div class="flex justify-between items-end mb-12">
                         <div>
-                            <h2 class="text-4xl font-black uppercase tracking-tighter">The Essentials</h2>
+                            <h2 class="text-4xl font-black uppercase tracking-tighter text-primary">The Essentials</h2>
                             <p class="text-zinc-500 mt-2 font-medium tracking-wide">Wearable reminders to exit your head and enter the moment.</p>
                         </div>
                         <button onclick="navigateTo('essentials')" class="flex items-center gap-2 text-[#FFEE00] font-bold uppercase tracking-tighter hover:text-black dark:hover:text-white transition-colors">
@@ -379,7 +381,7 @@
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-8">
                 <div>
                     <h2 class="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-2 text-primary font-black">Coming Soon</h2>
-                    <p class="text-zinc-500 uppercase font-black text-xs tracking-widest">Next Drop Access Restricted</p>
+                    <p class="text-zinc-500 uppercase font-black text-xs tracking-widest text-primary">Next Drop Access Restricted</p>
                 </div>
                 <div class="flex gap-4 md:gap-8 bg-zinc-100 dark:bg-zinc-900 p-4 px-6 md:px-10 rounded-sm shadow-xl border border-zinc-200 dark:border-white/5">
                     <div class="text-center">
@@ -471,7 +473,7 @@
                     </div>
                     <div class="space-y-2 group">
                         <label class="block text-[10px] font-black uppercase tracking-widest text-zinc-500 group-focus-within:text-[#FFEE00]">Password</label>
-                        <input type="password" name="password" required class="w-full bg-transparent border-b-2 border-zinc-200 dark:border-white/10 py-3 outline-none focus:border-[#FFEE00] font-bold tracking-tight text-primary">
+                        <input type="password" name="password" required class="w-full bg-transparent border-b-2 border-white/10 py-3 outline-none focus:border-[#FFEE00] font-bold tracking-tight text-primary">
                     </div>
                     <button type="submit" id="auth-submit-btn" class="w-full bg-[#FFEE00] text-black py-5 font-black uppercase tracking-tighter hover:bg-black hover:text-white transition-all transform hover:-translate-y-1 text-xs md:text-sm shadow-xl font-black">Sign In</button>
                 </form>
@@ -504,7 +506,7 @@
                 </div>
                 <div>
                     <h4 class="font-black uppercase tracking-widest text-xs mb-8 text-[#FFEE00]">Shop</h4>
-                    <ul class="space-y-4 text-sm font-bold text-zinc-500 uppercase">
+                    <ul class="space-y-4 text-sm font-bold text-zinc-500 uppercase font-black">
                         <li><button onclick="navigateTo('new_drop')" class="hover:text-[#FFEE00]">New Arrivals</button></li>
                         <li><button onclick="navigateTo('essentials')" class="hover:text-[#FFEE00]">Bestsellers</button></li>
                         <li><button onclick="navigateTo('accessories')" class="hover:text-[#FFEE00]">Accessories</button></li>
@@ -513,7 +515,7 @@
                 </div>
                 <div>
                     <h4 class="font-black uppercase tracking-widest text-xs mb-8 text-[#FFEE00]">Support</h4>
-                    <ul class="space-y-4 text-sm font-bold text-zinc-500 uppercase">
+                    <ul class="space-y-4 text-sm font-bold text-zinc-500 uppercase font-black">
                         <li><a href="#" class="hover:text-[#FFEE00]">Track Order</a></li>
                         <li><a href="#" class="hover:text-[#FFEE00]">Shipping</a></li>
                         <li><a href="#" class="hover:text-[#FFEE00]">Returns</a></li>
@@ -568,7 +570,7 @@
 
         const allInventory = [...collection, ...comingSoon];
 
-        // Global Mouse Flashlight
+        // Global Mouse Flashlight Tracking
         function updateFlashlightCoords(e) {
             document.documentElement.style.setProperty('--flashlight-x', e.clientX + 'px');
             document.documentElement.style.setProperty('--flashlight-y', e.clientY + 'px');
@@ -824,7 +826,7 @@
                     <div class="flex flex-col text-primary">
                         <div class="flex flex-col gap-2 mb-4">
                             <div class="flex items-center gap-4">
-                                <p class="text-[#FFEE00] font-black uppercase tracking-[0.3em] font-black">${product.category}</p>
+                                <p class="text-[#FFEE00] font-black uppercase tracking-[0.3em] font-black font-black">${product.category}</p>
                                 ${product.isSpecial ? `<span class="bg-[#FFEE00] text-black text-[8px] font-black px-2 py-0.5 uppercase tracking-tighter">Special Edition Colorway</span>` : ''}
                                 ${productId.startsWith('ah') ? `<span class="bg-white text-black text-[8px] font-black px-2 py-0.5 uppercase tracking-tighter border border-white/10">LTD SUPPLY: ${product.units}</span>` : ''}
                             </div>
@@ -834,16 +836,16 @@
                         </div>
                         <h1 class="text-3xl md:text-6xl font-black uppercase tracking-tighter mb-6 leading-tight text-primary font-black">${product.name}</h1>
                         <p class="text-2xl md:text-3xl font-mono mb-12 text-primary">${product.oldPrice ? `<span class="line-through text-zinc-400 mr-4">${product.oldPrice}</span>` : ''}<span class="text-[#FFEE00] font-bold">${product.price}</span></p>
-                        <div class="space-y-8 mb-12">
-                            <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-4 font-black">Select Size</p>
+                        <div class="space-y-8 mb-12 text-primary font-black">
+                            <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-4">Select Size</p>
                             <div class="flex flex-wrap gap-3" id="size-selector-detail">
                                 ${['S', 'M', 'L', 'XL', '2XL'].map(size => `<button onclick="selectDetailSize(this, '${size}')" class="w-14 h-14 md:w-16 md:h-16 border border-zinc-200 dark:border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase text-primary font-black">${size}</button>`).join('')}
                             </div>
                         </div>
                         <button id="add-to-bag-detail-btn" onclick="addToCartDetail('${product.id}')" class="w-full bg-[#FFEE00] text-black py-6 font-black uppercase tracking-tighter hover:bg-black hover:text-white transition-all transform hover:-translate-y-1 mb-12 shadow-xl font-black">Add to bag</button>
-                        <div class="space-y-12 text-primary">
-                            <div><p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-4 font-black">The Vision</p><p class="text-zinc-500 dark:text-zinc-300 leading-relaxed font-medium italic text-sm md:text-base">${(product.desc || sanctuaryDesc).replace(/\n/g, '<br/>')}</p></div>
-                            <div class="grid grid-cols-2 gap-8 pt-8 border-t border-zinc-100 dark:border-white/5"><div><p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-2 font-black">Material</p><p class="text-[10px] md:text-xs font-bold uppercase text-primary font-black">${product.material || "100% Heavyweight Cotton"}</p></div><div><p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-2 font-black">Print</p><p class="text-[10px] md:text-xs font-bold uppercase text-primary font-black">Eco-friendly Water-based</p></div></div>
+                        <div class="space-y-12 text-primary font-black">
+                            <div><p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-4">The Vision</p><p class="text-zinc-500 dark:text-zinc-300 leading-relaxed font-medium italic text-sm md:text-base">${(product.desc || sanctuaryDesc).replace(/\n/g, '<br/>')}</p></div>
+                            <div class="grid grid-cols-2 gap-8 pt-8 border-t border-zinc-100 dark:border-white/5"><div><p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-2">Material</p><p class="text-[10px] md:text-xs font-bold uppercase text-primary font-bold font-black">${product.material || "100% Heavyweight Cotton"}</p></div><div><p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-2">Print</p><p class="text-[10px] md:text-xs font-bold uppercase text-primary font-bold font-black">Eco-friendly Water-based</p></div></div>
                         </div>
                     </div>
                 </div>
@@ -898,10 +900,10 @@
                 footer.classList.add('hidden');
             } else {
                 container.innerHTML = cart.map(item => `
-                    <div class="flex gap-4 md:gap-6 items-center border-b border-zinc-100 dark:border-white/5 pb-6 text-primary">
+                    <div class="flex gap-4 md:gap-6 items-center border-b border-zinc-100 dark:border-white/5 pb-6 text-primary font-black">
                         <div class="w-16 h-16 md:w-20 md:h-20 bg-themed-secondary overflow-hidden"><img src="${item.imgFront}" class="w-full h-full object-cover ${item.id.startsWith('ah') ? 'grayscale' : ''}"></div>
-                        <div class="flex-grow text-primary">
-                            <h4 class="font-bold uppercase tracking-tight text-xs md:text-sm leading-tight text-primary font-black">${item.name}</h4>
+                        <div class="flex-grow text-primary font-black">
+                            <h4 class="font-bold uppercase tracking-tight text-xs md:text-sm leading-tight font-bold font-black">${item.name}</h4>
                             <p class="text-zinc-500 font-mono text-[10px] mt-1 uppercase tracking-tighter font-black">Size: ${item.size} — ${item.price}</p>
                         </div>
                         <button onclick="removeFromCart(${item.cartId})" class="text-zinc-400 hover:text-red-500 transition-colors"><i data-lucide="trash-2" size="18"></i></button>
