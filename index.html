@@ -69,7 +69,7 @@
                 circle 350px at var(--flashlight-x) var(--flashlight-y),
                 transparent 0%,
                 rgba(0, 0, 0, 0.15) 50%,
-                rgba(0, 0, 0, 0.7) 100%
+                rgba(0, 0, 0, 0.3) 100%
             );
         }
 
@@ -123,6 +123,7 @@
             background-color: var(--bg-primary);
             transform: translateX(-100%);
             transition: transform 0.3s ease-in-out;
+            overflow-y: auto;
         }
 
         .mobile-menu.open {
@@ -250,24 +251,30 @@
                 </div>
             </div>
 
-            <div class="flex items-center gap-3 md:gap-5">
-                <button onclick="toggleTheme()" class="theme-btn hover:text-[#FFEE00] transition-colors p-1" title="Toggle Theme">
+            <div class="flex items-center gap-2 md:gap-5">
+                <!-- Theme Toggle (Priority 6) -->
+                <button onclick="toggleTheme()" class="hidden lg:flex theme-btn hover:text-[#FFEE00] transition-colors p-1" title="Toggle Theme">
                     <i id="theme-icon" data-lucide="moon" size="20"></i>
                 </button>
-                <button onclick="navigateTo('coming_soon')" class="hover:text-[#FFEE00] transition-colors p-1" title="Coming Soon">
+                <!-- Coming Soon (Priority 5) -->
+                <button onclick="navigateTo('coming_soon')" class="hidden lg:flex hover:text-[#FFEE00] transition-colors p-1" title="Coming Soon">
                     <i data-lucide="clock" size="20"></i>
                 </button>
-                <button onclick="navigateTo('search')" class="hover:text-[#FFEE00] transition-colors p-1">
+                <!-- Search (Priority 4) -->
+                <button onclick="navigateTo('search')" class="hidden md:flex hover:text-[#FFEE00] transition-colors p-1">
                     <i data-lucide="search" size="20"></i>
                 </button>
-                <button onclick="navigateTo('wishlist')" class="hover:text-[#FFEE00] transition-colors relative p-1" title="Wishlist">
+                <!-- Wishlist (Priority 3) -->
+                <button onclick="navigateTo('wishlist')" class="hidden sm:flex hover:text-[#FFEE00] transition-colors relative p-1" title="Wishlist">
                     <i data-lucide="heart" size="20" id="wishlist-header-icon"></i>
                     <span id="wishlist-count" class="absolute -top-1 -right-1 bg-[#FFEE00] text-black text-[8px] font-bold h-3 w-3 rounded-full flex items-center justify-center hidden">0</span>
                 </button>
+                <!-- Account (Priority 2) -->
                 <button onclick="navigateTo('login')" class="flex items-center gap-2 hover:text-[#FFEE00] transition-colors group p-1">
                     <i data-lucide="user" size="20"></i>
                     <span class="text-xs font-bold uppercase tracking-tighter hidden lg:block">Login</span>
                 </button>
+                <!-- Cart (Priority 1) -->
                 <button id="cart-nav-btn" onclick="navigateTo('cart')" class="relative group p-1 text-primary">
                     <i data-lucide="shopping-bag" size="20" class="group-hover:text-[#FFEE00] transition-colors"></i>
                     <span id="cart-count" class="absolute -top-2 -right-2 bg-[#FFEE00] text-black text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">0</span>
@@ -282,7 +289,7 @@
             <h1 class="text-xl font-black uppercase text-primary font-black">ESCAPE<span class="text-[#FFEE00]">YOUR</span>MIND</h1>
             <button onclick="toggleMenu(false)"><i data-lucide="x" size="32"></i></button>
         </div>
-        <div class="flex flex-col gap-8 text-4xl font-black uppercase text-left">
+        <div class="flex flex-col gap-6 text-4xl font-black uppercase text-left pb-10">
             <button onclick="navigateTo('home'); toggleMenu(false)" class="text-[#FFEE00]">Home</button>
             <button onclick="navigateTo('new_drop'); toggleMenu(false)">New Drop</button>
             <button onclick="navigateTo('men'); toggleMenu(false)">Men</button>
@@ -290,7 +297,11 @@
             <button onclick="navigateTo('sale'); toggleMenu(false)">Sale</button>
             <button onclick="navigateTo('coming_soon'); toggleMenu(false)">Coming Soon</button>
             <button onclick="navigateTo('wishlist'); toggleMenu(false)">Wishlist</button>
+            <button onclick="navigateTo('search'); toggleMenu(false)">Search</button>
             <button onclick="navigateTo('login'); toggleMenu(false)">Account</button>
+            <button onclick="toggleTheme(); toggleMenu(false)" class="flex items-center gap-4 text-zinc-500 text-2xl mt-4">
+                <i data-lucide="moon" size="24"></i> Switch Theme
+            </button>
         </div>
     </div>
 
@@ -379,8 +390,8 @@
             </button>
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-8">
                 <div>
-                    <h2 class="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-2 text-primary">Coming Soon</h2>
-                    <p class="text-zinc-500 uppercase font-black text-xs tracking-widest text-primary">Next Drop: "After Hours"</p>
+                    <h2 class="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-2 text-primary font-black">Coming Soon</h2>
+                    <p class="text-zinc-500 uppercase font-black text-xs tracking-widest text-primary">Next Drop Access Restricted</p>
                 </div>
                 <div class="flex gap-4 md:gap-8 bg-zinc-100 dark:bg-zinc-900 p-4 px-6 md:px-10 rounded-sm shadow-xl border border-zinc-200 dark:border-white/5">
                     <div class="text-center">
@@ -412,7 +423,7 @@
             <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-400 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-8 transition-colors">
                 <i data-lucide="chevron-left" size="14"></i> Back
             </button>
-            <h2 class="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-4 text-primary">Wishlist</h2>
+            <h2 class="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-4 text-primary font-black">Wishlist</h2>
             <div class="w-20 h-2 bg-[#FFEE00] mb-12"></div>
             <div id="wishlist-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-x-4 md:gap-x-6 gap-y-10 md:gap-y-12">
                 <!-- Loaded by JS -->
@@ -425,7 +436,7 @@
         </section>
 
         <!-- Search View -->
-        <section id="view-search" class="view-section py-32 px-4 md:px-6 max-w-7xl mx-auto min-h-screen text-primary">
+        <section id="view-search" class="view-section py-32 px-4 md:px-6 max-w-7xl mx-auto min-h-screen text-primary font-black">
             <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-400 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-8 transition-colors">
                 <i data-lucide="chevron-left" size="14"></i> Back
             </button>
@@ -455,7 +466,7 @@
                 <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-400 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-12 transition-colors">
                     <i data-lucide="chevron-left" size="14"></i> Back
                 </button>
-                <div class="text-center mb-12">
+                <div class="text-center mb-12 text-primary">
                     <h2 id="auth-title" class="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-4 font-black">MEMBER<br/><span class="text-[#FFEE00]">ACCESS</span></h2>
                     <p id="auth-subtitle" class="text-zinc-500 font-bold tracking-widest text-xs uppercase">Enter your credentials to continue.</p>
                 </div>
@@ -472,7 +483,7 @@
                     </div>
                     <div class="space-y-2 group">
                         <label class="block text-[10px] font-black uppercase tracking-widest text-zinc-500 group-focus-within:text-[#FFEE00]">Password</label>
-                        <input type="password" name="password" required class="w-full bg-transparent border-b-2 border-white/10 py-3 outline-none focus:border-[#FFEE00] font-bold tracking-tight text-primary">
+                        <input type="password" name="password" required class="w-full bg-transparent border-b-2 border-zinc-200 dark:border-white/10 py-3 outline-none focus:border-[#FFEE00] font-bold tracking-tight text-primary">
                     </div>
                     <button type="submit" id="auth-submit-btn" class="w-full bg-[#FFEE00] text-black py-5 font-black uppercase tracking-tighter hover:bg-black hover:text-white transition-all transform hover:-translate-y-1 text-xs md:text-sm shadow-xl font-black">Sign In</button>
                 </form>
@@ -642,6 +653,8 @@
             } else if (viewId === 'wishlist') {
                 renderWishlist();
                 document.getElementById('view-wishlist').classList.add('active');
+            } else if (viewId === 'search') {
+                document.getElementById('view-search').classList.add('active');
             } else {
                 const target = document.getElementById(`view-${viewId}`);
                 if (target) target.classList.add('active');
@@ -775,7 +788,7 @@
             const titleMap = { new_drop: 'New Drop', men: 'Men', women: 'Women', sale: 'Sale', outerwear: 'Outerwear', streetwear: 'Streetwear', accessories: 'Accessories', essentials: 'All Essentials' };
             const titleElement = document.getElementById('collection-title');
             const gridElement = document.getElementById('collection-grid');
-            titleElement.innerText = titleMap[viewId] || 'Collection';
+            if (titleElement) titleElement.innerText = titleMap[viewId] || 'Collection';
             if (viewId === 'accessories') {
                 gridElement.classList.remove('grid');
                 gridElement.innerHTML = `<div class="col-span-full py-24 text-center text-primary"><i data-lucide="info" class="mx-auto mb-6 text-zinc-300 dark:text-zinc-700" size="48"></i><p class="text-xl md:text-2xl font-black uppercase tracking-tighter text-zinc-400 px-4">Whoops! Nothing here yet, check back later.</p><button onclick="handleBack()" class="mt-8 text-[#FFEE00] uppercase font-black tracking-widest text-xs hover:underline">Go Back</button></div>`;
@@ -825,7 +838,7 @@
                     <div class="flex flex-col text-primary">
                         <div class="flex flex-col gap-2 mb-4">
                             <div class="flex items-center gap-4">
-                                <p class="text-[#FFEE00] font-black uppercase tracking-[0.3em] font-black font-black font-black">${product.category}</p>
+                                <p class="text-[#FFEE00] font-black uppercase tracking-[0.3em] font-black">${product.category}</p>
                                 ${product.isSpecial ? `<span class="bg-[#FFEE00] text-black text-[8px] font-black px-2 py-0.5 uppercase tracking-tighter">Special Edition Colorway</span>` : ''}
                                 ${productId.startsWith('ah') ? `<span class="bg-white text-black text-[8px] font-black px-2 py-0.5 uppercase tracking-tighter border border-white/10">LTD SUPPLY: ${product.units}</span>` : ''}
                             </div>
@@ -835,14 +848,14 @@
                         </div>
                         <h1 class="text-3xl md:text-6xl font-black uppercase tracking-tighter mb-6 leading-tight text-primary font-black">${product.name}</h1>
                         <p class="text-2xl md:text-3xl font-mono mb-12 text-primary">${product.oldPrice ? `<span class="line-through text-zinc-400 mr-4">${product.oldPrice}</span>` : ''}<span class="text-[#FFEE00] font-bold">${product.price}</span></p>
-                        <div class="space-y-8 mb-12 text-primary font-black">
-                            <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-4">Select Size</p>
+                        <div class="space-y-8 mb-12">
+                            <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-4 font-black">Select Size</p>
                             <div class="flex flex-wrap gap-3" id="size-selector-detail">
                                 ${['S', 'M', 'L', 'XL', '2XL'].map(size => `<button onclick="selectDetailSize(this, '${size}')" class="w-14 h-14 md:w-16 md:h-16 border border-zinc-200 dark:border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase text-primary font-black">${size}</button>`).join('')}
                             </div>
                         </div>
-                        <button id="add-to-bag-detail-btn" onclick="addToCartDetail('${product.id}')" class="w-full bg-[#FFEE00] text-black py-6 font-black uppercase tracking-tighter hover:bg-black hover:text-white transition-all transform hover:-translate-y-1 mb-12 shadow-xl font-black">Add to bag</button>
-                        <div class="space-y-12 text-primary font-black">
+                        <button id="add-to-bag-detail-btn" onclick="addToCartDetail('${product.id}')" class="w-full bg-[#FFEE00] text-black py-6 font-black uppercase tracking-tighter hover:bg-black hover:text-white transition-all transform hover:-translate-y-1 mb-12 shadow-xl font-black text-xs md:text-sm">Add to bag</button>
+                        <div class="space-y-12 text-primary">
                             <div><p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-4 font-black">The Vision</p><p class="text-zinc-500 dark:text-zinc-300 leading-relaxed font-medium italic text-sm md:text-base">${(product.desc || sanctuaryDesc).replace(/\n/g, '<br/>')}</p></div>
                             <div class="grid grid-cols-2 gap-8 pt-8 border-t border-zinc-100 dark:border-white/5"><div><p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-2 font-black">Material</p><p class="text-[10px] md:text-xs font-bold uppercase text-primary font-bold font-black">${product.material || "100% Heavyweight Cotton"}</p></div><div><p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-2 font-black">Print</p><p class="text-[10px] md:text-xs font-bold uppercase text-primary font-bold font-black">Eco-friendly Water-based</p></div></div>
                         </div>
@@ -891,7 +904,8 @@
         }
 
         function updateCartUI() {
-            document.getElementById('cart-count').innerText = cart.length;
+            const countElements = [document.getElementById('cart-count'), document.getElementById('cart-nav-btn').querySelector('span')];
+            countElements.forEach(el => { if(el) el.innerText = cart.length; });
             const container = document.getElementById('cart-items-container');
             const footer = document.getElementById('cart-footer');
             if (cart.length === 0) {
@@ -902,8 +916,8 @@
                     <div class="flex gap-4 md:gap-6 items-center border-b border-zinc-100 dark:border-white/5 pb-6 text-primary font-black">
                         <div class="w-16 h-16 md:w-20 md:h-20 bg-themed-secondary overflow-hidden"><img src="${item.imgFront}" class="w-full h-full object-cover ${item.id.startsWith('ah') ? 'grayscale' : ''}"></div>
                         <div class="flex-grow text-primary font-black">
-                            <h4 class="font-bold uppercase tracking-tight text-xs md:text-sm leading-tight font-bold font-black font-black">${item.name}</h4>
-                            <p class="text-zinc-500 font-mono text-[10px] mt-1 uppercase tracking-tighter font-black font-black">Size: ${item.size} — ${item.price}</p>
+                            <h4 class="font-bold uppercase tracking-tight text-xs md:text-sm leading-tight font-bold font-black">${item.name}</h4>
+                            <p class="text-zinc-500 font-mono text-[10px] mt-1 uppercase tracking-tighter font-black">Size: ${item.size} — ${item.price}</p>
                         </div>
                         <button onclick="removeFromCart(${item.cartId})" class="text-zinc-400 hover:text-red-500 transition-colors"><i data-lucide="trash-2" size="18"></i></button>
                     </div>
