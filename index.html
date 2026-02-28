@@ -14,6 +14,8 @@
             --text-primary: #000000;
             --bg-secondary: #f4f4f5;
             --border-color: rgba(0, 0, 0, 0.1);
+            --flashlight-x: 50%;
+            --flashlight-y: 50%;
         }
 
         .dark-mode {
@@ -38,18 +40,40 @@
         /* Replace Yellow with Dark Gray in After Hours Theme */
         .after-hours-theme .text-\[\#FFEE00\], 
         .after-hours-theme .hover\:text-\[\#FFEE00\]:hover {
-            color: #a1a1aa !important; /* zinc-400 */
+            color: #a1a1aa !important;
         }
         .after-hours-theme .bg-\[\#FFEE00\],
         .after-hours-theme .hover\:bg-\[\#FFEE00\]:hover {
-            background-color: #3f3f46 !important; /* zinc-700 */
+            background-color: #3f3f46 !important;
             color: #ffffff !important;
         }
         .after-hours-theme .border-\[\#FFEE00\],
         .after-hours-theme .hover\:border-\[\#FFEE00\]:hover,
         .after-hours-theme .group-hover\:border-\[\#FFEE00\],
         .after-hours-theme .focus\:border-\[\#FFEE00\] {
-            border-color: #52525b !important; /* zinc-600 */
+            border-color: #52525b !important;
+        }
+
+        /* Desktop Flashlight Effect */
+        @media (min-width: 1024px) {
+            .flashlight-active {
+                position: relative;
+            }
+            .flashlight-active::after {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                pointer-events: none;
+                z-index: 100;
+                background: radial-gradient(
+                    circle 250px at var(--flashlight-x) var(--flashlight-y),
+                    transparent 0%,
+                    rgba(0, 0, 0, 0.95) 100%
+                );
+            }
         }
 
         body {
@@ -175,7 +199,7 @@
         .text-zinc-500 { color: #71717a !important; }
     </style>
 </head>
-<body class="custom-scroll">
+<body class="custom-scroll" onmousemove="updateFlashlight(event)">
 
     <!-- Add to Cart Notification Bubble -->
     <div id="add-notification" class="fixed top-0 left-0 w-full z-[100] p-4 flex justify-center pointer-events-none">
@@ -189,15 +213,15 @@
     <div id="size-modal" class="fixed inset-0 z-[110] flex items-center justify-center p-6 hidden">
         <div class="absolute inset-0 modal-overlay" onclick="closeSizeModal()"></div>
         <div class="relative bg-zinc-950 border border-white/10 p-8 max-w-sm w-full text-center shadow-2xl">
-            <h3 class="text-xl font-black uppercase tracking-tighter mb-2">Select Size</h3>
+            <h3 class="text-xl font-black uppercase tracking-tighter mb-2 text-primary">Select Size</h3>
             <p id="size-modal-product-name" class="text-[10px] text-zinc-500 uppercase font-black mb-8"></p>
             
             <div class="grid grid-cols-3 gap-3 mb-8">
-                <button onclick="confirmQuickAdd('S')" class="h-12 border border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase">S</button>
-                <button onclick="confirmQuickAdd('M')" class="h-12 border border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase">M</button>
-                <button onclick="confirmQuickAdd('L')" class="h-12 border border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase">L</button>
-                <button onclick="confirmQuickAdd('XL')" class="h-12 border border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase">XL</button>
-                <button onclick="confirmQuickAdd('2XL')" class="h-12 border border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase col-span-2">2XL</button>
+                <button onclick="confirmQuickAdd('S')" class="h-12 border border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase text-primary">S</button>
+                <button onclick="confirmQuickAdd('M')" class="h-12 border border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase text-primary">M</button>
+                <button onclick="confirmQuickAdd('L')" class="h-12 border border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase text-primary">L</button>
+                <button onclick="confirmQuickAdd('XL')" class="h-12 border border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase text-primary">XL</button>
+                <button onclick="confirmQuickAdd('2XL')" class="h-12 border border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase col-span-2 text-primary">2XL</button>
             </div>
             
             <button onclick="closeSizeModal()" class="text-zinc-500 uppercase font-black text-[10px] tracking-widest hover:text-[#FFEE00]">Cancel</button>
@@ -205,7 +229,7 @@
     </div>
 
     <!-- Navigation -->
-    <nav id="navbar" class="fixed w-full z-50 nav-transition py-4 md:py-6 px-4 md:px-6">
+    <nav id="navbar" class="fixed w-full z-[120] nav-transition py-4 md:py-6 px-4 md:px-6">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-4 md:gap-8">
                 <button class="lg:hidden" onclick="toggleMenu(true)">
@@ -234,7 +258,7 @@
                 </button>
                 <button onclick="navigateTo('login')" class="flex items-center gap-2 hover:text-[#FFEE00] transition-colors group p-1">
                     <i data-lucide="user" size="20"></i>
-                    <span class="text-xs font-bold uppercase tracking-tighter hidden lg:block">Login</span>
+                    <span class="text-xs font-bold uppercase tracking-tighter hidden lg:block text-primary">Login</span>
                 </button>
                 <button id="cart-nav-btn" onclick="navigateTo('cart')" class="relative group p-1">
                     <i data-lucide="shopping-bag" size="20" class="group-hover:text-[#FFEE00] transition-colors"></i>
@@ -245,9 +269,9 @@
     </nav>
 
     <!-- Mobile Menu -->
-    <div id="mobile-menu" class="fixed inset-0 z-[60] p-6 mobile-menu shadow-2xl">
+    <div id="mobile-menu" class="fixed inset-0 z-[130] p-6 mobile-menu shadow-2xl">
         <div class="flex justify-between items-center mb-12">
-            <h1 class="text-xl font-black uppercase">ESCAPE<span class="text-[#FFEE00]">YOUR</span>MIND</h1>
+            <h1 class="text-xl font-black uppercase text-primary">ESCAPE<span class="text-[#FFEE00]">YOUR</span>MIND</h1>
             <button onclick="toggleMenu(false)"><i data-lucide="x" size="32"></i></button>
         </div>
         <div class="flex flex-col gap-8 text-4xl font-black uppercase text-left">
@@ -433,7 +457,7 @@
                         <input type="password" name="password" required class="w-full bg-transparent border-b-2 border-white/10 py-3 outline-none focus:border-[#FFEE00] font-bold tracking-tight text-primary">
                     </div>
 
-                    <button type="submit" id="auth-submit-btn" class="w-full bg-[#FFEE00] text-black py-5 font-black uppercase tracking-tighter hover:bg-black hover:text-white transition-all transform hover:-translate-y-1">Sign In</button>
+                    <button type="submit" id="auth-submit-btn" class="w-full bg-[#FFEE00] text-black py-5 font-black uppercase tracking-tighter hover:bg-black hover:text-white transition-all transform hover:-translate-y-1 text-xs md:text-sm">Sign In</button>
                 </form>
 
                 <div class="mt-12 text-center">
@@ -481,7 +505,7 @@
                         <li><a href="#" class="hover:text-[#FFEE00]">Returns</a></li>
                     </ul>
                 </div>
-                <div class="bg-themed-secondary p-6 border border-zinc-100 dark:border-white/5 text-primary">
+                <div class="bg-themed-secondary p-6 border border-zinc-100 dark:border-white/5">
                     <h4 class="font-black uppercase tracking-widest text-[10px] text-[#FFEE00] mb-4">Status</h4>
                     <div class="flex items-center gap-2 mb-2 justify-center md:justify-start">
                         <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
@@ -513,13 +537,40 @@
         ];
 
         const comingSoon = [
-            { id: 'ah1', name: '"AFTER HOURS" FUR HOODIE', price: '$80.00', oldPrice: '', category: 'AFTER HOURS', imgFront: 'lucid_after_hours_hoodie_FRONT.png', imgBack: 'lucid_after_hours_hoodie_BACK.png', units: 25 },
-            { id: 'ah2', name: '"AFTER HOURS" JOGGERS', price: '$30.00', oldPrice: '', category: 'AFTER HOURS', imgFront: 'lucid_after_hours_joggers_FRONT.png', imgBack: 'lucid_after_hours_joggers_BACK.png', units: 25 }
+            { 
+                id: 'ah1', 
+                name: '"AFTER HOURS" FUR HOODIE', 
+                price: '$80.00', 
+                oldPrice: '', 
+                category: 'AFTER HOURS', 
+                imgFront: 'lucid_after_hours_hoodie_FRONT.png', 
+                imgBack: 'lucid_after_hours_hoodie_BACK.png', 
+                units: 25,
+                desc: "The sun goes down, the noise fades, but the mind stays loud. \n\n Dropping at the first tick of midnight, the \"After Hours\" Fur Hoodie is designed for those quiet hours when your thoughts try to take over. This piece provides refuge in style during your coldest nights featuring a detachable fur hood.",
+                material: "53% Polyester, 42% Thickened Cotton, 5% Other Fibers"
+            },
+            { 
+                id: 'ah2', 
+                name: '"AFTER HOURS" JOGGERS', 
+                price: '$30.00', 
+                oldPrice: '', 
+                category: 'AFTER HOURS', 
+                imgFront: 'lucid_after_hours_joggers_FRONT.png', 
+                imgBack: 'lucid_after_hours_joggers_BACK.png', 
+                units: 25,
+                desc: "The sun goes down, the noise fades, but the mind stays loud. \n\n Dropping at the first tick of midnight, the \"After Hours\" Joggers are designed for those quiet hours when your thoughts try to take over. This piece provides refuge in style during your coldest nights featuring a dark, washed, and versatile look to go with any of your other pieces.",
+                material: "53% Polyester, 42% Thickened Cotton, 5% Other Fibers"
+            }
         ];
 
         const allInventory = [...collection, ...comingSoon];
+        const productDesc = "Silence the noise. Step out of the cycle.\nOur signature hoodie is designed as a physical reminder to detach yourself from any thoughts or internal dialogue that limits your endless potential.";
 
-        const productDesc = "Silence the noise. Step out of the cycle.\nOur signature hoodie is designed as a physical reminder to detach yourself from any thoughts or internal dialogue that limits your endless potential. With its heavyweight build that provides a sense of security and oversized fit that provides a sense of utmost comfort, this is more than a garment—it's a sanctuary.";
+        // Flashlight logic
+        function updateFlashlight(e) {
+            document.documentElement.style.setProperty('--flashlight-x', e.clientX + 'px');
+            document.documentElement.style.setProperty('--flashlight-y', e.clientY + 'px');
+        }
 
         // Theme Handling
         function toggleTheme() {
@@ -566,9 +617,7 @@
             if (viewId === 'home') viewHistory = [];
 
             document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
-            
-            // Revert special theme classes on navigation
-            document.body.classList.remove('after-hours-theme');
+            document.body.classList.remove('after-hours-theme', 'flashlight-active');
 
             currentView = viewId;
             currentProductId = productId;
@@ -576,6 +625,14 @@
             if (viewId === 'product_detail' && productId) {
                 renderProductDetail(productId);
                 document.getElementById('view-product-detail').classList.add('active');
+                
+                // Active flashlight for After Hours on desktop
+                if (productId.startsWith('ah')) {
+                    document.body.classList.add('after-hours-theme');
+                    if (window.innerWidth >= 1024) {
+                        document.body.classList.add('flashlight-active');
+                    }
+                }
             } else if (['new_drop', 'men', 'women', 'sale', 'outerwear', 'streetwear', 'accessories', 'essentials'].includes(viewId)) {
                 renderCollection(viewId);
                 document.getElementById('view-collection').classList.add('active');
@@ -608,11 +665,7 @@
         function toggleAuthMode() {
             isSignUp = !isSignUp;
             document.getElementById('auth-title').innerHTML = isSignUp ? 'JOIN THE<br/><span class="text-[#FFEE00]">COLLECTIVE</span>' : 'MEMBER<br/><span class="text-[#FFEE00]">ACCESS</span>';
-            document.getElementById('auth-subtitle').innerText = isSignUp ? 'Create your account to join.' : 'Enter your credentials to continue.';
-            document.getElementById('auth-action').value = isSignUp ? 'signup' : 'login';
             document.getElementById('auth-submit-btn').innerText = isSignUp ? 'Join Now' : 'Sign In';
-            document.getElementById('auth-switch-text').innerText = isSignUp ? 'Already a member?' : 'Not a member?';
-            document.getElementById('auth-switch-btn').innerText = isSignUp ? 'Sign In' : 'Join the Collective';
             document.getElementById('signup-name-field').classList.toggle('hidden', !isSignUp);
         }
 
@@ -671,7 +724,7 @@
                         <h4 class="font-bold text-xs md:text-sm uppercase group-hover:text-[#FFEE00] transition-colors leading-tight text-primary font-bold">${product.name}</h4>
                         <p class="font-mono text-xs">
                             ${product.oldPrice ? `<span class="line-through text-zinc-400 mr-2">${product.oldPrice}</span>` : ''}
-                            <span class="text-primary">${product.price}</span>
+                            <span class="text-primary font-bold">${product.price}</span>
                         </p>
                     </div>
                 </div>
@@ -680,14 +733,7 @@
 
         function renderCollection(viewId) {
             const titleMap = {
-                new_drop: 'New Drop',
-                men: 'Men',
-                women: 'Women',
-                sale: 'Sale',
-                outerwear: 'Outerwear',
-                streetwear: 'Streetwear',
-                accessories: 'Accessories',
-                essentials: 'All Essentials'
+                new_drop: 'New Drop', men: 'Men', women: 'Women', sale: 'Sale', outerwear: 'Outerwear', streetwear: 'Streetwear', accessories: 'Accessories', essentials: 'All Essentials'
             };
             const titleElement = document.getElementById('collection-title');
             const gridElement = document.getElementById('collection-grid');
@@ -719,16 +765,12 @@
             const product = allInventory.find(p => p.id === productId);
             if (!product) return;
 
-            const isAH = productId.startsWith('ah');
-            if (isAH) document.body.classList.add('after-hours-theme');
-            else document.body.classList.remove('after-hours-theme');
-
             const container = document.getElementById('view-product-detail');
             container.innerHTML = `
-                <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-400 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-12 transition-colors">
+                <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-400 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-12 transition-colors relative z-[110]">
                     <i data-lucide="chevron-left" size="14"></i> Back
                 </button>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 relative z-[110]">
                     <div class="space-y-6">
                         <div class="relative aspect-square bg-themed-secondary overflow-hidden cursor-pointer group/mainimg" onclick="toggleProductImage('${product.imgFront}', '${product.imgBack}')">
                             <img src="${product.imgFront}" id="main-product-img" class="w-full h-full object-cover transition-opacity duration-500">
@@ -749,17 +791,17 @@
                     <div class="flex flex-col">
                         <div class="flex justify-between items-start mb-4">
                             <p class="text-[#FFEE00] font-black uppercase tracking-[0.3em]">${product.category} COLLECTION</p>
-                            ${isAH ? `<span class="bg-white text-black text-[8px] font-black px-2 py-1 uppercase tracking-tighter">LTD SUPPLY: ${product.units}</span>` : ''}
+                            ${productId.startsWith('ah') ? `<span class="bg-white text-black text-[8px] font-black px-2 py-1 uppercase tracking-tighter">LTD SUPPLY: ${product.units}</span>` : ''}
                         </div>
                         <h1 class="text-3xl md:text-6xl font-black uppercase tracking-tighter mb-6 leading-tight text-primary font-bold">${product.name}</h1>
                         <p class="text-2xl md:text-3xl font-mono mb-12 text-primary">
                             ${product.oldPrice ? `<span class="line-through text-zinc-400 mr-4">${product.oldPrice}</span>` : ''}
-                            <span class="text-primary">${product.price}</span>
+                            <span class="text-[#FFEE00] font-bold">${product.price}</span>
                         </p>
 
-                        <div class="space-y-8 mb-12">
+                        <div class="space-y-8 mb-12 text-primary">
                             <div>
-                                <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-4 text-primary">Select Size</p>
+                                <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-4">Select Size</p>
                                 <div class="flex flex-wrap gap-3" id="size-selector-detail">
                                     ${['S', 'M', 'L', 'XL', '2XL'].map(size => `
                                         <button onclick="selectDetailSize(this, '${size}')" class="w-14 h-14 md:w-16 md:h-16 border border-zinc-200 dark:border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase text-primary">${size}</button>
@@ -775,12 +817,12 @@
                         <div class="space-y-12 text-primary">
                             <div>
                                 <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-4">The Vision</p>
-                                <p class="text-zinc-500 dark:text-zinc-300 leading-relaxed font-medium italic text-sm md:text-base">${productDesc.replace(/\n/g, '<br/>')}</p>
+                                <p class="text-zinc-500 dark:text-zinc-300 leading-relaxed font-medium italic text-sm md:text-base">${(product.desc || productDesc).replace(/\n/g, '<br/>')}</p>
                             </div>
                             <div class="grid grid-cols-2 gap-8 pt-8 border-t border-zinc-100 dark:border-white/5">
                                 <div>
                                     <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-2">Material</p>
-                                    <p class="text-[10px] md:text-xs font-bold uppercase text-primary font-bold">100% Heavyweight Cotton</p>
+                                    <p class="text-[10px] md:text-xs font-bold uppercase text-primary font-bold">${product.material || "100% Heavyweight Cotton"}</p>
                                 </div>
                                 <div>
                                     <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-2">Print</p>
@@ -833,18 +875,15 @@
 
         function toggleProductImage(front, back) {
             const img = document.getElementById('main-product-img');
-            if (img.src.includes(front)) {
-                img.src = back;
-            } else {
-                img.src = front;
-            }
+            if (img.src.includes(front)) img.src = back;
+            else img.src = front;
         }
 
         function handleSearch(query) {
             const grid = document.getElementById('search-results-grid');
             if (!query) { grid.innerHTML = ''; return; }
             const filtered = allInventory.filter(item => item.name.toLowerCase().includes(query.toLowerCase()));
-            grid.innerHTML = filtered.length ? filtered.map(i => createProductCard(i)).join('') : '<p class="col-span-full text-zinc-400 uppercase font-black text-center py-20">No items found matching your query.</p>';
+            grid.innerHTML = filtered.length ? filtered.map(i => createProductCard(i)).join('') : '<p class="col-span-full text-zinc-400 uppercase font-black text-center py-20">No items found.</p>';
             lucide.createIcons();
         }
 
@@ -877,9 +916,9 @@
             } else {
                 container.innerHTML = cart.map(item => `
                     <div class="flex gap-4 md:gap-6 items-center border-b border-zinc-100 dark:border-white/5 pb-6 text-primary">
-                        <div class="w-16 h-16 md:w-20 md:h-20 bg-themed-secondary overflow-hidden"><img src="${item.imgFront}" class="w-full h-full object-cover"></div>
-                        <div class="flex-grow">
-                            <h4 class="font-bold uppercase tracking-tight text-xs md:text-sm leading-tight text-primary font-bold">${item.name}</h4>
+                        <div class="w-16 h-16 md:w-20 md:h-20 bg-themed-secondary overflow-hidden"><img src="${item.imgFront}" class="w-full h-full object-cover ${item.id.startsWith('ah') ? 'grayscale' : ''}"></div>
+                        <div class="flex-grow text-primary">
+                            <h4 class="font-bold uppercase tracking-tight text-xs md:text-sm leading-tight font-bold">${item.name}</h4>
                             <p class="text-zinc-500 font-mono text-[10px] mt-1 uppercase tracking-tighter">Size: ${item.size} — ${item.price}</p>
                         </div>
                         <button onclick="removeFromCart(${item.cartId})" class="text-zinc-400 hover:text-red-500"><i data-lucide="trash-2" size="18"></i></button>
