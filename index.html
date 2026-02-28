@@ -54,26 +54,26 @@
             border-color: #52525b !important;
         }
 
-        /* Desktop Flashlight Effect */
-        @media (min-width: 1024px) {
-            .flashlight-active {
-                position: relative;
-            }
-            .flashlight-active::after {
-                content: '';
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100vw;
-                height: 100vh;
-                pointer-events: none;
-                z-index: 100;
-                background: radial-gradient(
-                    circle 250px at var(--flashlight-x) var(--flashlight-y),
-                    transparent 0%,
-                    rgba(0, 0, 0, 0.95) 100%
-                );
-            }
+        /* Desktop Flashlight Overlay */
+        #flashlight-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            background: radial-gradient(
+                circle 300px at var(--flashlight-x) var(--flashlight-y),
+                transparent 0%,
+                rgba(0, 0, 0, 0.98) 100%
+            );
+        }
+
+        .flashlight-active #flashlight-overlay {
+            opacity: 1;
         }
 
         body {
@@ -199,7 +199,10 @@
         .text-zinc-500 { color: #71717a !important; }
     </style>
 </head>
-<body class="custom-scroll" onmousemove="updateFlashlight(event)">
+<body class="custom-scroll">
+
+    <!-- Flashlight Layer -->
+    <div id="flashlight-overlay"></div>
 
     <!-- Add to Cart Notification Bubble -->
     <div id="add-notification" class="fixed top-0 left-0 w-full z-[100] p-4 flex justify-center pointer-events-none">
@@ -316,7 +319,7 @@
                 </div>
                 <div onclick="navigateTo('streetwear')" class="group relative aspect-square overflow-hidden cursor-pointer bg-themed-secondary">
                     <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=1400" class="w-full h-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105" />
-                    <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors"></div>
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/40 transition-colors"></div>
                     <div class="absolute bottom-8 left-8">
                         <h3 class="text-2xl font-black uppercase text-white">Streetwear</h3>
                         <div class="w-12 h-1 bg-[#FFEE00] mt-2 group-hover:w-full transition-all duration-500"></div>
@@ -566,11 +569,14 @@
         const allInventory = [...collection, ...comingSoon];
         const productDesc = "Silence the noise. Step out of the cycle.\nOur signature hoodie is designed as a physical reminder to detach yourself from any thoughts or internal dialogue that limits your endless potential.";
 
-        // Flashlight logic
-        function updateFlashlight(e) {
+        // Flashlight logic - Improved for global tracking
+        function updateFlashlightCoords(e) {
             document.documentElement.style.setProperty('--flashlight-x', e.clientX + 'px');
             document.documentElement.style.setProperty('--flashlight-y', e.clientY + 'px');
         }
+
+        // Add global listener for flashlight
+        window.addEventListener('mousemove', updateFlashlightCoords);
 
         // Theme Handling
         function toggleTheme() {
@@ -626,7 +632,7 @@
                 renderProductDetail(productId);
                 document.getElementById('view-product-detail').classList.add('active');
                 
-                // Active flashlight for After Hours on desktop
+                // Activate flashlight for After Hours on desktop
                 if (productId.startsWith('ah')) {
                     document.body.classList.add('after-hours-theme');
                     if (window.innerWidth >= 1024) {
@@ -765,6 +771,7 @@
             const product = allInventory.find(p => p.id === productId);
             if (!product) return;
 
+            const isAH = productId.startsWith('ah');
             const container = document.getElementById('view-product-detail');
             container.innerHTML = `
                 <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-400 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-12 transition-colors relative z-[110]">
@@ -801,7 +808,7 @@
 
                         <div class="space-y-8 mb-12 text-primary">
                             <div>
-                                <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-4">Select Size</p>
+                                <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-4 text-primary">Select Size</p>
                                 <div class="flex flex-wrap gap-3" id="size-selector-detail">
                                     ${['S', 'M', 'L', 'XL', '2XL'].map(size => `
                                         <button onclick="selectDetailSize(this, '${size}')" class="w-14 h-14 md:w-16 md:h-16 border border-zinc-200 dark:border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase text-primary">${size}</button>
