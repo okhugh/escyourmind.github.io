@@ -259,6 +259,10 @@
                 <button onclick="navigateTo('search')" class="hover:text-[#FFEE00] transition-colors p-1">
                     <i data-lucide="search" size="20"></i>
                 </button>
+                <button onclick="navigateTo('wishlist')" class="hover:text-[#FFEE00] transition-colors relative p-1" title="Wishlist">
+                    <i data-lucide="heart" size="20" id="wishlist-header-icon"></i>
+                    <span id="wishlist-count" class="absolute -top-1 -right-1 bg-[#FFEE00] text-black text-[8px] font-bold h-3 w-3 rounded-full flex items-center justify-center hidden">0</span>
+                </button>
                 <button onclick="navigateTo('login')" class="flex items-center gap-2 hover:text-[#FFEE00] transition-colors group p-1">
                     <i data-lucide="user" size="20"></i>
                     <span class="text-xs font-bold uppercase tracking-tighter hidden lg:block text-primary">Login</span>
@@ -284,6 +288,7 @@
             <button onclick="navigateTo('women'); toggleMenu(false)">Women</button>
             <button onclick="navigateTo('sale'); toggleMenu(false)">Sale</button>
             <button onclick="navigateTo('coming_soon'); toggleMenu(false)">Coming Soon</button>
+            <button onclick="navigateTo('wishlist'); toggleMenu(false)">Wishlist</button>
             <button onclick="navigateTo('login'); toggleMenu(false)">Account</button>
         </div>
     </div>
@@ -319,7 +324,7 @@
                 </div>
                 <div onclick="navigateTo('streetwear')" class="group relative aspect-square overflow-hidden cursor-pointer bg-themed-secondary">
                     <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=1400" class="w-full h-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105" />
-                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/40 transition-colors"></div>
+                    <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors"></div>
                     <div class="absolute bottom-8 left-8">
                         <h3 class="text-2xl font-black uppercase text-white">Streetwear</h3>
                         <div class="w-12 h-1 bg-[#FFEE00] mt-2 group-hover:w-full transition-all duration-500"></div>
@@ -374,7 +379,7 @@
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-8">
                 <div>
                     <h2 class="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-2 text-primary">Coming Soon</h2>
-                    <p class="text-zinc-500 uppercase font-black text-xs tracking-widest">Next Drop: "After Hours"</p>
+                    <p class="text-zinc-500 uppercase font-black text-xs tracking-widest">Next Drop Access Restricted</p>
                 </div>
                 <div class="flex gap-4 md:gap-8 bg-zinc-100 dark:bg-zinc-900 p-4 px-6 md:px-10 rounded-sm">
                     <div class="text-center">
@@ -398,6 +403,18 @@
             <div class="w-full h-1 bg-zinc-100 dark:bg-zinc-900 mb-12"></div>
             <div id="coming-soon-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-x-4 md:gap-x-6 gap-y-10 md:gap-y-12">
                 <!-- After Hours Items Loaded by JS -->
+            </div>
+        </section>
+
+        <!-- Wishlist View -->
+        <section id="view-wishlist" class="view-section py-32 px-4 md:px-6 max-w-7xl mx-auto min-h-screen text-primary">
+            <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-400 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-8 transition-colors">
+                <i data-lucide="chevron-left" size="14"></i> Back
+            </button>
+            <h2 class="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-4">Wishlist</h2>
+            <div class="w-20 h-2 bg-[#FFEE00] mb-12"></div>
+            <div id="wishlist-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-x-4 md:gap-x-6 gap-y-10 md:gap-y-12">
+                <!-- Loaded by JS -->
             </div>
         </section>
 
@@ -444,22 +461,18 @@
                 
                 <form action="auth.php" method="POST" class="space-y-8">
                     <input type="hidden" id="auth-action" name="action" value="login">
-                    
                     <div id="signup-name-field" class="space-y-2 group hidden">
                         <label class="block text-[10px] font-black uppercase tracking-widest text-zinc-500 group-focus-within:text-[#FFEE00]">Full Name</label>
                         <input type="text" name="name" class="w-full bg-transparent border-b-2 border-zinc-200 dark:border-white/10 py-3 outline-none focus:border-[#FFEE00] font-bold tracking-tight text-primary">
                     </div>
-
                     <div class="space-y-2 group">
                         <label class="block text-[10px] font-black uppercase tracking-widest text-zinc-500 group-focus-within:text-[#FFEE00]">Email Address</label>
                         <input type="email" name="email" required class="w-full bg-transparent border-b-2 border-zinc-200 dark:border-white/10 py-3 outline-none focus:border-[#FFEE00] font-bold tracking-tight text-primary">
                     </div>
-
                     <div class="space-y-2 group">
                         <label class="block text-[10px] font-black uppercase tracking-widest text-zinc-500 group-focus-within:text-[#FFEE00]">Password</label>
                         <input type="password" name="password" required class="w-full bg-transparent border-b-2 border-white/10 py-3 outline-none focus:border-[#FFEE00] font-bold tracking-tight text-primary">
                     </div>
-
                     <button type="submit" id="auth-submit-btn" class="w-full bg-[#FFEE00] text-black py-5 font-black uppercase tracking-tighter hover:bg-black hover:text-white transition-all transform hover:-translate-y-1 text-xs md:text-sm">Sign In</button>
                 </form>
 
@@ -525,12 +538,13 @@
         let currentView = 'home';
         let currentProductId = null;
         let cart = [];
+        let wishlist = [];
         let isSignUp = false;
         let viewHistory = [];
         let pendingQuickAddId = null;
         let isDarkMode = false;
 
-        // Inventory - 1400x1400 High Quality
+        // Inventory
         const collection = [
             { id: 'h1', name: '"DOPAMINE RUSH" LUCID ESCAPE HOODIE', price: '$49.80', oldPrice: '$60.00', category: 'F/W 2026', imgFront: 'lucid_dopamine_rush_hoodie_FRONT.png', imgBack: 'lucid_dopamine_rush_hoodie_BACK.png' },
             { id: 'h2', name: '"CONCRETE FOG" LUCID ESCAPE HOODIE', price: '$49.80', oldPrice: '$60.00', category: 'F/W 2026', imgFront: 'lucid_concrete_fog_hoodie_FRONT.png', imgBack: 'lucid_concrete_fog_hoodie_BACK.png' },
@@ -567,15 +581,13 @@
         ];
 
         const allInventory = [...collection, ...comingSoon];
-        const productDesc = "Silence the noise. Step out of the cycle.\nOur signature hoodie is designed as a physical reminder to detach yourself from any thoughts or internal dialogue that limits your endless potential.";
+        const productDesc = "Silence the noise. Step out of the cycle.";
 
-        // Flashlight logic - Improved for global tracking
+        // Flashlight logic
         function updateFlashlightCoords(e) {
             document.documentElement.style.setProperty('--flashlight-x', e.clientX + 'px');
             document.documentElement.style.setProperty('--flashlight-y', e.clientY + 'px');
         }
-
-        // Add global listener for flashlight
         window.addEventListener('mousemove', updateFlashlightCoords);
 
         // Theme Handling
@@ -608,11 +620,15 @@
         // Persistence Helpers
         function saveProgress() {
             localStorage.setItem('oa_cart', JSON.stringify(cart));
+            localStorage.setItem('oa_wishlist', JSON.stringify(wishlist));
         }
 
         function loadProgress() {
             const savedCart = localStorage.getItem('oa_cart');
+            const savedWishlist = localStorage.getItem('oa_wishlist');
             if (savedCart) cart = JSON.parse(savedCart);
+            if (savedWishlist) wishlist = JSON.parse(savedWishlist);
+            updateWishlistBadge();
         }
 
         // Core Functions
@@ -631,13 +647,9 @@
             if (viewId === 'product_detail' && productId) {
                 renderProductDetail(productId);
                 document.getElementById('view-product-detail').classList.add('active');
-                
-                // Activate flashlight for After Hours on desktop
                 if (productId.startsWith('ah')) {
                     document.body.classList.add('after-hours-theme');
-                    if (window.innerWidth >= 1024) {
-                        document.body.classList.add('flashlight-active');
-                    }
+                    if (window.innerWidth >= 1024) document.body.classList.add('flashlight-active');
                 }
             } else if (['new_drop', 'men', 'women', 'sale', 'outerwear', 'streetwear', 'accessories', 'essentials'].includes(viewId)) {
                 renderCollection(viewId);
@@ -645,6 +657,9 @@
             } else if (viewId === 'coming_soon') {
                 renderComingSoon();
                 document.getElementById('view-coming_soon').classList.add('active');
+            } else if (viewId === 'wishlist') {
+                renderWishlist();
+                document.getElementById('view-wishlist').classList.add('active');
             } else {
                 const target = document.getElementById(`view-${viewId}`);
                 if (target) target.classList.add('active');
@@ -675,7 +690,6 @@
             document.getElementById('signup-name-field').classList.toggle('hidden', !isSignUp);
         }
 
-        // Quick Add Modal Functions
         function openSizeModal(productId) {
             pendingQuickAddId = productId;
             const product = allInventory.find(p => p.id === productId);
@@ -703,9 +717,37 @@
             closeSizeModal();
         }
 
-        // Render Helpers
+        function toggleWishlist(productId) {
+            const product = allInventory.find(i => i.id === productId);
+            const index = wishlist.findIndex(item => item.id === productId);
+            if (index === -1) {
+                wishlist.push(product);
+                showNotification("Added to Wishlist");
+            } else {
+                wishlist.splice(index, 1);
+                showNotification("Removed from Wishlist");
+            }
+            saveProgress();
+            updateWishlistBadge();
+            refreshCurrentView();
+        }
+
+        function updateWishlistBadge() {
+            const badge = document.getElementById('wishlist-count');
+            const icon = document.getElementById('wishlist-header-icon');
+            if (wishlist.length > 0) {
+                badge.innerText = wishlist.length;
+                badge.classList.remove('hidden');
+                icon.classList.add('fill-[#FFEE00]', 'text-[#FFEE00]');
+            } else {
+                badge.classList.add('hidden');
+                icon.classList.remove('fill-[#FFEE00]', 'text-[#FFEE00]');
+            }
+        }
+
         function createProductCard(product) {
             const isAH = product.id.startsWith('ah');
+            const inWishlist = wishlist.some(item => item.id === product.id);
             return `
                 <div class="group cursor-pointer" onclick="navigateTo('product_detail', '${product.id}')">
                     <div class="relative aspect-square overflow-hidden bg-themed-secondary mb-4 product-image-container">
@@ -713,6 +755,11 @@
                         <img src="${product.imgBack}" class="absolute inset-0 w-full h-full object-cover secondary-image opacity-0 group-hover:opacity-90 transition-opacity duration-500 ${isAH ? 'grayscale' : ''}">
                         <div class="absolute top-2 left-2 flex flex-col gap-1">
                             ${isAH ? `<span class="bg-black text-white text-[7px] font-black px-2 py-1 uppercase tracking-widest border border-white/10">Ltd: ${product.units} Units</span>` : ''}
+                        </div>
+                        <div class="absolute top-2 right-2 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+                            <button onclick="event.stopPropagation(); toggleWishlist('${product.id}')" class="bg-white text-black p-2 rounded-full hover:bg-[#FFEE00] shadow-xl">
+                                <i data-lucide="heart" size="18" class="${inWishlist ? 'fill-black' : ''}"></i>
+                            </button>
                         </div>
                         <div class="absolute bottom-0 left-0 right-0 p-4 translate-y-full md:group-hover:translate-y-0 transition-transform duration-300">
                             <button onclick="event.stopPropagation(); openSizeModal('${product.id}')" class="w-full bg-[#FFEE00] text-black py-3 font-black uppercase text-[10px] tracking-tighter flex items-center justify-center gap-2 shadow-lg">
@@ -738,22 +785,13 @@
         }
 
         function renderCollection(viewId) {
-            const titleMap = {
-                new_drop: 'New Drop', men: 'Men', women: 'Women', sale: 'Sale', outerwear: 'Outerwear', streetwear: 'Streetwear', accessories: 'Accessories', essentials: 'All Essentials'
-            };
+            const titleMap = { new_drop: 'New Drop', men: 'Men', women: 'Women', sale: 'Sale', outerwear: 'Outerwear', streetwear: 'Streetwear', accessories: 'Accessories', essentials: 'All Essentials' };
             const titleElement = document.getElementById('collection-title');
             const gridElement = document.getElementById('collection-grid');
             titleElement.innerText = titleMap[viewId] || 'Collection';
-            
             if (viewId === 'accessories') {
                 gridElement.classList.remove('grid');
-                gridElement.innerHTML = `
-                    <div class="col-span-full py-24 text-center text-primary">
-                        <i data-lucide="info" class="mx-auto mb-6 text-zinc-300 dark:text-zinc-700" size="48"></i>
-                        <p class="text-xl md:text-2xl font-black uppercase tracking-tighter text-zinc-400 px-4">Whoops! Nothing here yet, check back later.</p>
-                        <button onclick="handleBack()" class="mt-8 text-[#FFEE00] uppercase font-black tracking-widest text-xs hover:underline">Go Back</button>
-                    </div>
-                `;
+                gridElement.innerHTML = `<div class="col-span-full py-24 text-center text-primary"><i data-lucide="info" class="mx-auto mb-6 text-zinc-300 dark:text-zinc-700" size="48"></i><p class="text-xl md:text-2xl font-black uppercase tracking-tighter text-zinc-400 px-4">Whoops! Nothing here yet, check back later.</p><button onclick="handleBack()" class="mt-8 text-[#FFEE00] uppercase font-black tracking-widest text-xs hover:underline">Go Back</button></div>`;
             } else {
                 gridElement.classList.add('grid');
                 gridElement.innerHTML = collection.map(p => createProductCard(p)).join('');
@@ -762,16 +800,25 @@
         }
 
         function renderComingSoon() {
-            const grid = document.getElementById('coming-soon-grid');
-            grid.innerHTML = comingSoon.map(p => createProductCard(p)).join('');
+            document.getElementById('coming-soon-grid').innerHTML = comingSoon.map(p => createProductCard(p)).join('');
+            lucide.createIcons();
+        }
+
+        function renderWishlist() {
+            const gridElement = document.getElementById('wishlist-grid');
+            if (wishlist.length === 0) {
+                gridElement.classList.remove('grid');
+                gridElement.innerHTML = `<div class="col-span-full py-24 text-center"><i data-lucide="heart" class="mx-auto mb-6 text-zinc-200 dark:text-zinc-800" size="48"></i><p class="text-xl md:text-2xl font-black uppercase tracking-tighter text-zinc-400 px-4">Your wishlist is empty.</p><button onclick="navigateTo('home')" class="mt-8 text-[#FFEE00] uppercase font-black tracking-widest text-xs hover:underline">Return to Store</button></div>`;
+            } else {
+                gridElement.classList.add('grid');
+                gridElement.innerHTML = wishlist.map(p => createProductCard(p)).join('');
+            }
             lucide.createIcons();
         }
 
         function renderProductDetail(productId) {
             const product = allInventory.find(p => p.id === productId);
             if (!product) return;
-
-            const isAH = productId.startsWith('ah');
             const container = document.getElementById('view-product-detail');
             container.innerHTML = `
                 <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-400 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-12 transition-colors relative z-[110]">
@@ -781,61 +828,30 @@
                     <div class="space-y-6">
                         <div class="relative aspect-square bg-themed-secondary overflow-hidden cursor-pointer group/mainimg" onclick="toggleProductImage('${product.imgFront}', '${product.imgBack}')">
                             <img src="${product.imgFront}" id="main-product-img" class="w-full h-full object-cover transition-opacity duration-500">
-                            <div class="absolute bottom-4 right-4 bg-black/50 backdrop-blur-md p-3 rounded-full opacity-0 group-hover/mainimg:opacity-100 transition-opacity">
-                                <i data-lucide="refresh-cw" class="text-white" size="20"></i>
-                            </div>
+                            <div class="absolute bottom-4 right-4 bg-black/50 backdrop-blur-md p-3 rounded-full opacity-0 group-hover/mainimg:opacity-100 transition-opacity"><i data-lucide="refresh-cw" class="text-white" size="20"></i></div>
                         </div>
                         <div class="flex gap-4 overflow-x-auto pb-2 custom-scroll">
-                            <button onclick="document.getElementById('main-product-img').src='${product.imgFront}'" class="w-20 min-w-[5rem] aspect-square bg-themed-secondary overflow-hidden border border-zinc-200 dark:border-white/10 hover:border-[#FFEE00]">
-                                <img src="${product.imgFront}" class="w-full h-full object-cover opacity-60 hover:opacity-100">
-                            </button>
-                            <button onclick="document.getElementById('main-product-img').src='${product.imgBack}'" class="w-20 min-w-[5rem] aspect-square bg-themed-secondary overflow-hidden border border-zinc-200 dark:border-white/10 hover:border-[#FFEE00]">
-                                <img src="${product.imgBack}" class="w-full h-full object-cover opacity-60 hover:opacity-100">
-                            </button>
+                            <button onclick="document.getElementById('main-product-img').src='${product.imgFront}'" class="w-20 min-w-[5rem] aspect-square bg-themed-secondary overflow-hidden border border-zinc-200 dark:border-white/10 hover:border-[#FFEE00]"><img src="${product.imgFront}" class="w-full h-full object-cover opacity-60 hover:opacity-100"></button>
+                            <button onclick="document.getElementById('main-product-img').src='${product.imgBack}'" class="w-20 min-w-[5rem] aspect-square bg-themed-secondary overflow-hidden border border-zinc-200 dark:border-white/10 hover:border-[#FFEE00]"><img src="${product.imgBack}" class="w-full h-full object-cover opacity-60 hover:opacity-100"></button>
                         </div>
                     </div>
-
                     <div class="flex flex-col">
                         <div class="flex justify-between items-start mb-4">
                             <p class="text-[#FFEE00] font-black uppercase tracking-[0.3em]">${product.category} COLLECTION</p>
-                            ${productId.startsWith('ah') ? `<span class="bg-white text-black text-[8px] font-black px-2 py-1 uppercase tracking-tighter">LTD SUPPLY: ${product.units}</span>` : ''}
+                            <button onclick="toggleWishlist('${product.id}')" class="text-zinc-400 hover:text-[#FFEE00] transition-colors"><i data-lucide="heart" size="24" class="${wishlist.some(i => i.id === product.id) ? 'fill-[#FFEE00] text-[#FFEE00]' : ''}"></i></button>
                         </div>
                         <h1 class="text-3xl md:text-6xl font-black uppercase tracking-tighter mb-6 leading-tight text-primary font-bold">${product.name}</h1>
-                        <p class="text-2xl md:text-3xl font-mono mb-12 text-primary">
-                            ${product.oldPrice ? `<span class="line-through text-zinc-400 mr-4">${product.oldPrice}</span>` : ''}
-                            <span class="text-[#FFEE00] font-bold">${product.price}</span>
-                        </p>
-
+                        <p class="text-2xl md:text-3xl font-mono mb-12 text-primary">${product.oldPrice ? `<span class="line-through text-zinc-400 mr-4">${product.oldPrice}</span>` : ''}<span class="text-[#FFEE00] font-bold">${product.price}</span></p>
                         <div class="space-y-8 mb-12 text-primary">
-                            <div>
-                                <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-4 text-primary">Select Size</p>
-                                <div class="flex flex-wrap gap-3" id="size-selector-detail">
-                                    ${['S', 'M', 'L', 'XL', '2XL'].map(size => `
-                                        <button onclick="selectDetailSize(this, '${size}')" class="w-14 h-14 md:w-16 md:h-16 border border-zinc-200 dark:border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase text-primary">${size}</button>
-                                    `).join('')}
-                                </div>
+                            <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-4">Select Size</p>
+                            <div class="flex flex-wrap gap-3" id="size-selector-detail">
+                                ${['S', 'M', 'L', 'XL', '2XL'].map(size => `<button onclick="selectDetailSize(this, '${size}')" class="w-14 h-14 md:w-16 md:h-16 border border-zinc-200 dark:border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase text-primary">${size}</button>`).join('')}
                             </div>
                         </div>
-
-                        <button id="add-to-bag-detail-btn" onclick="addToCartDetail('${product.id}')" class="w-full bg-[#FFEE00] text-black py-6 font-black uppercase tracking-tighter hover:bg-black hover:text-white transition-all transform hover:-translate-y-1 mb-12 shadow-xl">
-                            Add to bag
-                        </button>
-
+                        <button id="add-to-bag-detail-btn" onclick="addToCartDetail('${product.id}')" class="w-full bg-[#FFEE00] text-black py-6 font-black uppercase tracking-tighter hover:bg-black hover:text-white transition-all transform hover:-translate-y-1 mb-12 shadow-xl">Add to bag</button>
                         <div class="space-y-12 text-primary">
-                            <div>
-                                <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-4">The Vision</p>
-                                <p class="text-zinc-500 dark:text-zinc-300 leading-relaxed font-medium italic text-sm md:text-base">${(product.desc || productDesc).replace(/\n/g, '<br/>')}</p>
-                            </div>
-                            <div class="grid grid-cols-2 gap-8 pt-8 border-t border-zinc-100 dark:border-white/5">
-                                <div>
-                                    <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-2">Material</p>
-                                    <p class="text-[10px] md:text-xs font-bold uppercase text-primary font-bold">${product.material || "100% Heavyweight Cotton"}</p>
-                                </div>
-                                <div>
-                                    <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-2">Print</p>
-                                    <p class="text-[10px] md:text-xs font-bold uppercase text-primary font-bold">Eco-friendly Water-based</p>
-                                </div>
-                            </div>
+                            <div><p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-4">The Vision</p><p class="text-zinc-500 dark:text-zinc-300 leading-relaxed font-medium italic text-sm md:text-base">${(product.desc || productDesc).replace(/\n/g, '<br/>')}</p></div>
+                            <div class="grid grid-cols-2 gap-8 pt-8 border-t border-zinc-100 dark:border-white/5"><div><p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-2">Material</p><p class="text-[10px] md:text-xs font-bold uppercase text-primary font-bold">${product.material || "100% Heavyweight Cotton"}</p></div><div><p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-2">Print</p><p class="text-[10px] md:text-xs font-bold uppercase text-primary font-bold">Eco-friendly Water-based</p></div></div>
                         </div>
                     </div>
                 </div>
@@ -843,47 +859,18 @@
             lucide.createIcons();
         }
 
-        let selectedDetailSize = null;
-        function selectDetailSize(btn, size) {
-            document.querySelectorAll('#size-selector-detail button').forEach(b => {
-                b.classList.remove('bg-[#FFEE00]', 'text-black', 'border-[#FFEE00]');
-                b.classList.add('border-zinc-200', 'dark:border-white/10');
-            });
-            btn.classList.add('bg-[#FFEE00]', 'text-black', 'border-[#FFEE00]');
-            btn.classList.remove('border-zinc-200', 'dark:border-white/10');
-            selectedDetailSize = size;
-        }
-
-        function addToCartDetail(productId) {
-            if (!selectedDetailSize) {
-                showNotification("Please select a size");
-                return;
-            }
-            const product = allInventory.find(i => i.id === productId);
-            if (product) {
-                cart.push({ ...product, size: selectedDetailSize, cartId: Date.now() });
-                updateCartUI();
-                saveProgress();
-                showNotification(`Added to Bag (${selectedDetailSize})`);
-                selectedDetailSize = null;
-                document.querySelectorAll('#size-selector-detail button').forEach(b => {
-                    b.classList.remove('bg-[#FFEE00]', 'text-black', 'border-[#FFEE00]');
-                    b.classList.add('border-zinc-200', 'dark:border-white/10');
-                });
-            }
-        }
-
         function refreshCurrentView() {
             if (currentView === 'home') document.getElementById('essentials-preview-grid').innerHTML = collection.slice(0, 4).map(e => createProductCard(e)).join('');
             else if (['new_drop', 'men', 'women', 'sale', 'outerwear', 'streetwear', 'accessories', 'essentials'].includes(currentView)) renderCollection(currentView);
             else if (currentView === 'coming_soon') renderComingSoon();
+            else if (currentView === 'wishlist') renderWishlist();
             else if (currentView === 'product_detail') renderProductDetail(currentProductId);
+            lucide.createIcons();
         }
 
         function toggleProductImage(front, back) {
             const img = document.getElementById('main-product-img');
-            if (img.src.includes(front)) img.src = back;
-            else img.src = front;
+            if (img.src.includes(front)) img.src = back; else img.src = front;
         }
 
         function handleSearch(query) {
@@ -901,10 +888,7 @@
             notif.classList.add('show');
             const cartBtn = document.getElementById('cart-nav-btn');
             cartBtn.classList.add('cart-pop-active');
-            setTimeout(() => {
-                notif.classList.remove('show');
-                cartBtn.classList.remove('cart-pop-active');
-            }, 2500);
+            setTimeout(() => { notif.classList.remove('show'); cartBtn.classList.remove('cart-pop-active'); }, 2500);
         }
 
         function removeFromCart(cartId) {
@@ -936,6 +920,32 @@
                 document.getElementById('cart-total').innerText = `$${total.toFixed(2)}`;
             }
             lucide.createIcons();
+        }
+
+        function selectDetailSize(btn, size) {
+            document.querySelectorAll('#size-selector-detail button').forEach(b => {
+                b.classList.remove('bg-[#FFEE00]', 'text-black', 'border-[#FFEE00]');
+                b.classList.add('border-zinc-200', 'dark:border-white/10');
+            });
+            btn.classList.add('bg-[#FFEE00]', 'text-black', 'border-[#FFEE00]');
+            btn.classList.remove('border-zinc-200', 'dark:border-white/10');
+            selectedDetailSize = size;
+        }
+
+        function addToCartDetail(productId) {
+            if (!selectedDetailSize) { showNotification("Please select a size"); return; }
+            const product = allInventory.find(i => i.id === productId);
+            if (product) {
+                cart.push({ ...product, size: selectedDetailSize, cartId: Date.now() });
+                updateCartUI();
+                saveProgress();
+                showNotification(`Added to Bag (${selectedDetailSize})`);
+                selectedDetailSize = null;
+                document.querySelectorAll('#size-selector-detail button').forEach(b => {
+                    b.classList.remove('bg-[#FFEE00]', 'text-black', 'border-[#FFEE00]');
+                    b.classList.add('border-zinc-200', 'dark:border-white/10');
+                });
+            }
         }
 
         // Init
