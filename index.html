@@ -225,6 +225,7 @@
             <button onclick="navigateTo('women'); toggleMenu(false)">Women</button>
             <button onclick="navigateTo('sale'); toggleMenu(false)">Sale</button>
             <button onclick="navigateTo('wishlist'); toggleMenu(false)">Wishlist</button>
+            <button onclick="navigateTo('login'); toggleMenu(false)">Account</button>
         </div>
     </div>
 
@@ -349,8 +350,8 @@
         </section>
 
         <!-- Login / Signup View -->
-        <section id="view-login" class="view-section py-32 px-6 flex items-center justify-center min-h-screen">
-            <div class="max-w-md w-full">
+        <section id="view-login" class="view-section py-20 px-6 max-w-7xl mx-auto">
+            <div class="max-w-md mx-auto">
                 <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-400 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-12 transition-colors">
                     <i data-lucide="chevron-left" size="14"></i> Back
                 </button>
@@ -644,7 +645,7 @@
                     </div>
                     <div class="space-y-1 px-1">
                         <p class="text-[8px] text-[#FFEE00] font-black uppercase tracking-[0.2em]">${product.category}</p>
-                        <h4 class="font-bold text-xs md:text-sm uppercase group-hover:text-[#FFEE00] transition-colors leading-tight">${product.name}</h4>
+                        <h4 class="font-bold text-xs md:text-sm uppercase group-hover:text-[#FFEE00] transition-colors leading-tight text-primary">${product.name}</h4>
                         <p class="font-mono text-xs">
                             <span class="line-through text-zinc-400 mr-2">${product.oldPrice}</span>
                             <span class="text-zinc-600 dark:text-zinc-300">${product.price}</span>
@@ -672,7 +673,7 @@
             if (viewId === 'accessories') {
                 gridElement.classList.remove('grid');
                 gridElement.innerHTML = `
-                    <div class="col-span-full py-24 text-center">
+                    <div class="col-span-full py-24 text-center text-primary">
                         <i data-lucide="info" class="mx-auto mb-6 text-zinc-300 dark:text-zinc-700" size="48"></i>
                         <p class="text-xl md:text-2xl font-black uppercase tracking-tighter text-zinc-400 px-4">Whoops! Nothing here yet, check back later.</p>
                         <button onclick="handleBack()" class="mt-8 text-[#FFEE00] uppercase font-black tracking-widest text-xs hover:underline">Go Back</button>
@@ -737,8 +738,8 @@
                                 <i data-lucide="heart" size="24" class="${wishlist.some(i => i.id === product.id) ? 'fill-[#FFEE00] text-[#FFEE00]' : ''}"></i>
                             </button>
                         </div>
-                        <h1 class="text-3xl md:text-6xl font-black uppercase tracking-tighter mb-6 leading-tight">${product.name}</h1>
-                        <p class="text-2xl md:text-3xl font-mono mb-12">
+                        <h1 class="text-3xl md:text-6xl font-black uppercase tracking-tighter mb-6 leading-tight text-primary">${product.name}</h1>
+                        <p class="text-2xl md:text-3xl font-mono mb-12 text-primary">
                             <span class="line-through text-zinc-400 mr-4">${product.oldPrice}</span>
                             <span class="text-[#FFEE00]">${product.price}</span>
                         </p>
@@ -748,7 +749,7 @@
                                 <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-4">Select Size</p>
                                 <div class="flex flex-wrap gap-3" id="size-selector-detail">
                                     ${['S', 'M', 'L', 'XL', '2XL'].map(size => `
-                                        <button onclick="selectDetailSize(this, '${size}')" class="w-14 h-14 md:w-16 md:h-16 border border-zinc-200 dark:border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase">${size}</button>
+                                        <button onclick="selectDetailSize(this, '${size}')" class="w-14 h-14 md:w-16 md:h-16 border border-zinc-200 dark:border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase text-primary">${size}</button>
                                     `).join('')}
                                 </div>
                             </div>
@@ -766,11 +767,11 @@
                             <div class="grid grid-cols-2 gap-8 pt-8 border-t border-zinc-100 dark:border-white/5">
                                 <div>
                                     <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-2">Material</p>
-                                    <p class="text-[10px] md:text-xs font-bold uppercase">100% Heavyweight Cotton</p>
+                                    <p class="text-[10px] md:text-xs font-bold uppercase text-primary">100% Heavyweight Cotton</p>
                                 </div>
                                 <div>
                                     <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-2">Print</p>
-                                    <p class="text-[10px] md:text-xs font-bold uppercase">Eco-friendly Water-based</p>
+                                    <p class="text-[10px] md:text-xs font-bold uppercase text-primary">Eco-friendly Water-based</p>
                                 </div>
                             </div>
                         </div>
@@ -884,7 +885,7 @@
             const container = document.getElementById('cart-items-container');
             const footer = document.getElementById('cart-footer');
             if (cart.length === 0) {
-                container.innerHTML = `<div class="py-20 text-center border border-zinc-100 dark:border-white/5 bg-zinc-50 dark:bg-zinc-950"><p class="text-zinc-400 uppercase font-black">Your bag is empty.</p></div>`;
+                container.innerHTML = `<div class="py-20 text-center border border-zinc-100 dark:border-white/5 bg-themed-secondary"><p class="text-zinc-400 uppercase font-black">Your bag is empty.</p></div>`;
                 footer.classList.add('hidden');
             } else {
                 container.innerHTML = cart.map(item => `
