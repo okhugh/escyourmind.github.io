@@ -9,11 +9,26 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
         
+        :root {
+            --bg-primary: #ffffff;
+            --text-primary: #000000;
+            --bg-secondary: #f4f4f5;
+            --border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode {
+            --bg-primary: #000000;
+            --text-primary: #ffffff;
+            --bg-secondary: #18181b;
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: black;
-            color: white;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
             overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         ::selection {
@@ -26,7 +41,7 @@
         }
 
         .custom-scroll::-webkit-scrollbar-track {
-            background: #000;
+            background: var(--bg-primary);
         }
 
         .custom-scroll::-webkit-scrollbar-thumb {
@@ -38,7 +53,8 @@
         }
 
         .scrolled {
-            background-color: rgba(0, 0, 0, 0.9);
+            background-color: var(--bg-primary);
+            opacity: 0.95;
             backdrop-filter: blur(12px);
             padding-top: 0.75rem;
             padding-bottom: 0.75rem;
@@ -46,6 +62,7 @@
         }
 
         .mobile-menu {
+            background-color: var(--bg-primary);
             transform: translateX(-100%);
             transition: transform 0.3s ease-in-out;
         }
@@ -66,7 +83,7 @@
         }
 
         .hero-gradient {
-            background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0) 100%);
+            background: linear-gradient(to top, var(--bg-primary) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0) 100%);
         }
 
         /* Cart Feedback Effects */
@@ -103,6 +120,20 @@
             background-color: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(4px);
         }
+
+        .theme-btn {
+            transition: transform 0.3s ease;
+        }
+        .theme-btn:active {
+            transform: scale(0.9);
+        }
+
+        /* Fixed specific black elements for light mode compatibility */
+        .bg-zinc-950 { background-color: var(--bg-secondary) !important; }
+        .bg-zinc-900 { background-color: var(--bg-secondary) !important; }
+        .border-white\/10 { border-color: var(--border-color) !important; }
+        .border-white\/5 { border-color: var(--border-color) !important; }
+        .text-zinc-500 { color: #71717a !important; }
     </style>
 </head>
 <body class="custom-scroll">
@@ -118,7 +149,7 @@
     <!-- Size Selection Modal -->
     <div id="size-modal" class="fixed inset-0 z-[110] flex items-center justify-center p-6 hidden">
         <div class="absolute inset-0 modal-overlay" onclick="closeSizeModal()"></div>
-        <div class="relative bg-zinc-950 border border-white/10 p-8 max-w-sm w-full text-center">
+        <div class="relative bg-zinc-950 border border-white/10 p-8 max-w-sm w-full text-center shadow-2xl">
             <h3 class="text-xl font-black uppercase tracking-tighter mb-2">Select Size</h3>
             <p id="size-modal-product-name" class="text-[10px] text-zinc-500 uppercase font-black mb-8"></p>
             
@@ -130,7 +161,7 @@
                 <button onclick="confirmQuickAdd('2XL')" class="h-12 border border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase col-span-2">2XL</button>
             </div>
             
-            <button onclick="closeSizeModal()" class="text-zinc-500 uppercase font-black text-[10px] tracking-widest hover:text-white">Cancel</button>
+            <button onclick="closeSizeModal()" class="text-zinc-500 uppercase font-black text-[10px] tracking-widest hover:text-[#FFEE00]">Cancel</button>
         </div>
     </div>
 
@@ -144,7 +175,7 @@
                 <h1 onclick="navigateTo('home')" class="text-lg md:text-2xl font-black tracking-tighter uppercase cursor-pointer">
                     ESCAPE<span class="text-[#FFEE00]">YOUR</span>MIND
                 </h1>
-                <div class="hidden lg:flex gap-6 text-sm font-medium uppercase tracking-widest text-gray-400">
+                <div class="hidden lg:flex gap-6 text-sm font-medium uppercase tracking-widest text-zinc-500">
                     <button onclick="navigateTo('new_drop')" class="hover:text-[#FFEE00] transition-colors">New Drop</button>
                     <button onclick="navigateTo('men')" class="hover:text-[#FFEE00] transition-colors">Men</button>
                     <button onclick="navigateTo('women')" class="hover:text-[#FFEE00] transition-colors">Women</button>
@@ -153,18 +184,21 @@
             </div>
 
             <div class="flex items-center gap-3 md:gap-5">
-                <button onclick="navigateTo('search')" class="hover:text-[#FFEE00] transition-colors">
+                <button onclick="toggleTheme()" class="theme-btn hover:text-[#FFEE00] transition-colors p-1" title="Toggle Theme">
+                    <i id="theme-icon" data-lucide="moon" size="20"></i>
+                </button>
+                <button onclick="navigateTo('search')" class="hover:text-[#FFEE00] transition-colors p-1">
                     <i data-lucide="search" size="20"></i>
                 </button>
-                <button onclick="navigateTo('wishlist')" class="hover:text-[#FFEE00] transition-colors relative">
+                <button onclick="navigateTo('wishlist')" class="hover:text-[#FFEE00] transition-colors relative p-1">
                     <i data-lucide="heart" size="20"></i>
-                    <span id="wishlist-count" class="absolute -top-1 -right-1 bg-white text-black text-[8px] font-bold h-3 w-3 rounded-full flex items-center justify-center hidden">0</span>
+                    <span id="wishlist-count" class="absolute -top-1 -right-1 bg-[#FFEE00] text-black text-[8px] font-bold h-3 w-3 rounded-full flex items-center justify-center hidden">0</span>
                 </button>
-                <button onclick="navigateTo('login')" class="flex items-center gap-2 hover:text-[#FFEE00] transition-colors group">
+                <button onclick="navigateTo('login')" class="flex items-center gap-2 hover:text-[#FFEE00] transition-colors group p-1">
                     <i data-lucide="user" size="20"></i>
                     <span class="text-xs font-bold uppercase tracking-tighter hidden lg:block">Login</span>
                 </button>
-                <button id="cart-nav-btn" onclick="navigateTo('cart')" class="relative group">
+                <button id="cart-nav-btn" onclick="navigateTo('cart')" class="relative group p-1">
                     <i data-lucide="shopping-bag" size="20" class="group-hover:text-[#FFEE00] transition-colors"></i>
                     <span id="cart-count" class="absolute -top-2 -right-2 bg-[#FFEE00] text-black text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">0</span>
                 </button>
@@ -173,7 +207,7 @@
     </nav>
 
     <!-- Mobile Menu -->
-    <div id="mobile-menu" class="fixed inset-0 bg-black z-[60] p-6 mobile-menu">
+    <div id="mobile-menu" class="fixed inset-0 z-[60] p-6 mobile-menu">
         <div class="flex justify-between items-center mb-12">
             <h1 class="text-xl font-black uppercase">ESCAPE<span class="text-[#FFEE00]">YOUR</span>MIND</h1>
             <button onclick="toggleMenu(false)"><i data-lucide="x" size="32"></i></button>
@@ -195,13 +229,13 @@
         <section id="view-home" class="view-section active">
             <div class="relative h-screen flex items-center overflow-hidden">
                 <div class="absolute inset-0 z-0">
-                    <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=2000" class="w-full h-full object-cover opacity-60 grayscale" alt="Hero">
+                    <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=2000" class="w-full h-full object-cover grayscale opacity-80" alt="Hero">
                     <div class="absolute inset-0 hero-gradient"></div>
                 </div>
                 <div class="relative z-10 max-w-7xl mx-auto px-6 w-full mt-20 text-center md:text-left">
-                    <p class="text-[#FFEE00] font-bold uppercase tracking-[0.3em] mb-4 text-xs md:text-sm animate-pulse">F/W 2026 DROP NOW LIVE</p>
+                    <p class="text-[#FFEE00] font-black uppercase tracking-[0.3em] mb-4 text-xs md:text-sm animate-pulse">F/W 2026 DROP NOW LIVE</p>
                     <h2 class="text-5xl md:text-9xl font-black uppercase leading-[0.85] mb-8 tracking-tighter">LUCID<br /><span class="text-[#FFEE00]">BODY.</span></h2>
-                    <button onclick="navigateTo('new_drop')" class="bg-[#FFEE00] text-black px-10 py-5 font-black uppercase tracking-tighter hover:bg-white transition-all transform hover:-translate-y-1 flex items-center gap-2 group mx-auto md:mx-0">
+                    <button onclick="navigateTo('new_drop')" class="bg-[#FFEE00] text-black px-10 py-5 font-black uppercase tracking-tighter hover:bg-black hover:text-white transition-all transform hover:-translate-y-1 flex items-center gap-2 group mx-auto md:mx-0">
                         Shop Collection <i data-lucide="arrow-right" size="20"></i>
                     </button>
                 </div>
@@ -209,25 +243,25 @@
 
             <!-- Categories Grid -->
             <section class="py-24 max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div onclick="navigateTo('outerwear')" class="group relative aspect-square overflow-hidden cursor-pointer">
-                    <img src="https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&q=80&w=1400" class="w-full h-full object-cover opacity-80" />
-                    <div class="absolute inset-0 bg-black/40"></div>
+                <div onclick="navigateTo('outerwear')" class="group relative aspect-square overflow-hidden cursor-pointer bg-zinc-100">
+                    <img src="https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&q=80&w=1400" class="w-full h-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105" />
+                    <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors"></div>
                     <div class="absolute bottom-8 left-8">
                         <h3 class="text-2xl font-black uppercase text-white">Outerwear</h3>
                         <div class="w-12 h-1 bg-[#FFEE00] mt-2 group-hover:w-full transition-all duration-500"></div>
                     </div>
                 </div>
-                <div onclick="navigateTo('streetwear')" class="group relative aspect-square overflow-hidden cursor-pointer">
-                    <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=1400" class="w-full h-full object-cover opacity-80" />
-                    <div class="absolute inset-0 bg-black/40"></div>
+                <div onclick="navigateTo('streetwear')" class="group relative aspect-square overflow-hidden cursor-pointer bg-zinc-100">
+                    <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=1400" class="w-full h-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105" />
+                    <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors"></div>
                     <div class="absolute bottom-8 left-8">
                         <h3 class="text-2xl font-black uppercase text-white">Streetwear</h3>
                         <div class="w-12 h-1 bg-[#FFEE00] mt-2 group-hover:w-full transition-all duration-500"></div>
                     </div>
                 </div>
-                <div onclick="navigateTo('accessories')" class="group relative aspect-square overflow-hidden cursor-pointer">
-                    <img src="https://images.unsplash.com/photo-1509100194014-d49809396daa?auto=format&fit=crop&q=80&w=1400" class="w-full h-full object-cover opacity-80" />
-                    <div class="absolute inset-0 bg-black/40"></div>
+                <div onclick="navigateTo('accessories')" class="group relative aspect-square overflow-hidden cursor-pointer bg-zinc-100">
+                    <img src="https://images.unsplash.com/photo-1509100194014-d49809396daa?auto=format&fit=crop&q=80&w=1400" class="w-full h-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105" />
+                    <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors"></div>
                     <div class="absolute bottom-8 left-8">
                         <h3 class="text-2xl font-black uppercase text-white">Accessories</h3>
                         <div class="w-12 h-1 bg-[#FFEE00] mt-2 group-hover:w-full transition-all duration-500"></div>
@@ -236,14 +270,14 @@
             </section>
 
             <!-- Essentials Preview -->
-            <section class="py-24 bg-[#0a0a0a]">
+            <section class="py-24 bg-zinc-50 dark:bg-[#0a0a0a]">
                 <div class="max-w-7xl mx-auto px-6">
                     <div class="flex justify-between items-end mb-12">
                         <div>
                             <h2 class="text-4xl font-black uppercase tracking-tighter">The Essentials</h2>
-                            <p class="text-gray-500 mt-2 font-medium tracking-wide">Wearable reminders to exit your head and enter the moment.</p>
+                            <p class="text-zinc-500 mt-2 font-medium tracking-wide">Wearable reminders to exit your head and enter the moment.</p>
                         </div>
-                        <button onclick="navigateTo('essentials')" class="flex items-center gap-2 text-[#FFEE00] font-bold uppercase tracking-tighter hover:text-white transition-colors">
+                        <button onclick="navigateTo('essentials')" class="flex items-center gap-2 text-[#FFEE00] font-bold uppercase tracking-tighter hover:text-black dark:hover:text-white transition-colors">
                             Browse All <i data-lucide="chevron-right" size="18"></i>
                         </button>
                     </div>
@@ -256,7 +290,7 @@
 
         <!-- Collection / Category View -->
         <section id="view-collection" class="view-section py-32 px-4 md:px-6 max-w-7xl mx-auto min-h-screen">
-            <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-500 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-8 transition-colors">
+            <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-400 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-8 transition-colors">
                 <i data-lucide="chevron-left" size="14"></i> Back
             </button>
             <h2 id="collection-title" class="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-4">COLLECTION</h2>
@@ -268,7 +302,7 @@
 
         <!-- Wishlist View -->
         <section id="view-wishlist" class="view-section py-32 px-4 md:px-6 max-w-7xl mx-auto min-h-screen">
-            <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-500 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-8 transition-colors">
+            <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-400 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-8 transition-colors">
                 <i data-lucide="chevron-left" size="14"></i> Back
             </button>
             <h2 class="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-4">Wishlist</h2>
@@ -285,33 +319,33 @@
 
         <!-- Search View -->
         <section id="view-search" class="view-section py-32 px-4 md:px-6 max-w-7xl mx-auto min-h-screen">
-            <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-500 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-8 transition-colors">
+            <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-400 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-8 transition-colors">
                 <i data-lucide="chevron-left" size="14"></i> Back
             </button>
-            <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="SEARCH COLLECTION..." class="w-full bg-transparent border-b-2 border-white/10 pb-4 text-3xl md:text-6xl font-black uppercase tracking-tighter outline-none focus:border-[#FFEE00] transition-colors">
+            <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="SEARCH COLLECTION..." class="w-full bg-transparent border-b-2 border-zinc-200 dark:border-white/10 pb-4 text-3xl md:text-6xl font-black uppercase tracking-tighter outline-none focus:border-[#FFEE00] transition-colors">
             <div id="search-results-grid" class="mt-12 grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8"></div>
         </section>
 
         <!-- Cart View -->
         <section id="view-cart" class="view-section py-32 px-4 md:px-6 max-w-3xl mx-auto min-h-screen">
-            <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-500 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-8 transition-colors">
+            <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-400 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-8 transition-colors">
                 <i data-lucide="chevron-left" size="14"></i> Back
             </button>
             <h2 class="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-12">Your Cart</h2>
             <div id="cart-items-container" class="space-y-6"></div>
-            <div id="cart-footer" class="mt-12 pt-8 border-t border-white/10 flex justify-between items-end hidden">
+            <div id="cart-footer" class="mt-12 pt-8 border-t border-zinc-100 dark:border-white/10 flex justify-between items-end hidden">
                 <div>
-                    <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest">Total Amount</p>
+                    <p class="text-zinc-400 text-[10px] font-black uppercase tracking-widest">Total Amount</p>
                     <p id="cart-total" class="text-3xl md:text-4xl font-black text-[#FFEE00]">$0.00</p>
                 </div>
-                <button class="bg-[#FFEE00] text-black px-10 md:px-12 py-5 font-black uppercase tracking-tighter hover:bg-white transition-colors">Checkout</button>
+                <button class="bg-[#FFEE00] text-black px-10 md:px-12 py-5 font-black uppercase tracking-tighter hover:bg-black hover:text-white transition-colors">Checkout</button>
             </div>
         </section>
 
         <!-- Login / Signup View -->
         <section id="view-login" class="view-section py-32 px-6 flex items-center justify-center min-h-screen">
             <div class="max-w-md w-full">
-                <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-500 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-12 transition-colors">
+                <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-400 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-12 transition-colors">
                     <i data-lucide="chevron-left" size="14"></i> Back
                 </button>
                 <div class="text-center mb-12">
@@ -324,20 +358,20 @@
                     
                     <div id="signup-name-field" class="space-y-2 group hidden">
                         <label class="block text-[10px] font-black uppercase tracking-widest text-zinc-500 group-focus-within:text-[#FFEE00]">Full Name</label>
-                        <input type="text" name="name" class="w-full bg-transparent border-b-2 border-white/10 py-3 outline-none focus:border-[#FFEE00] font-bold tracking-tight">
+                        <input type="text" name="name" class="w-full bg-transparent border-b-2 border-zinc-200 dark:border-white/10 py-3 outline-none focus:border-[#FFEE00] font-bold tracking-tight">
                     </div>
 
                     <div class="space-y-2 group">
                         <label class="block text-[10px] font-black uppercase tracking-widest text-zinc-500 group-focus-within:text-[#FFEE00]">Email Address</label>
-                        <input type="email" name="email" required class="w-full bg-transparent border-b-2 border-white/10 py-3 outline-none focus:border-[#FFEE00] font-bold tracking-tight">
+                        <input type="email" name="email" required class="w-full bg-transparent border-b-2 border-zinc-200 dark:border-white/10 py-3 outline-none focus:border-[#FFEE00] font-bold tracking-tight">
                     </div>
 
                     <div class="space-y-2 group">
                         <label class="block text-[10px] font-black uppercase tracking-widest text-zinc-500 group-focus-within:text-[#FFEE00]">Password</label>
-                        <input type="password" name="password" required class="w-full bg-transparent border-b-2 border-white/10 py-3 outline-none focus:border-[#FFEE00] font-bold tracking-tight">
+                        <input type="password" name="password" required class="w-full bg-transparent border-b-2 border-zinc-200 dark:border-white/10 py-3 outline-none focus:border-[#FFEE00] font-bold tracking-tight">
                     </div>
 
-                    <button type="submit" id="auth-submit-btn" class="w-full bg-[#FFEE00] text-black py-5 font-black uppercase tracking-tighter hover:bg-white transition-all transform hover:-translate-y-1">Sign In</button>
+                    <button type="submit" id="auth-submit-btn" class="w-full bg-[#FFEE00] text-black py-5 font-black uppercase tracking-tighter hover:bg-black hover:text-white transition-all transform hover:-translate-y-1">Sign In</button>
                 </form>
 
                 <div class="mt-12 text-center">
@@ -345,7 +379,7 @@
                         <span id="auth-switch-text">Not a member?</span> 
                         <button onclick="toggleAuthMode()" id="auth-switch-btn" class="text-[#FFEE00] ml-2 hover:underline">Join the Collective</button>
                     </p>
-                    <button onclick="navigateTo('home')" class="mt-8 text-xs font-black uppercase tracking-tighter text-zinc-500 hover:text-white flex items-center justify-center gap-2 mx-auto">
+                    <button onclick="navigateTo('home')" class="mt-8 text-xs font-black uppercase tracking-tighter text-zinc-400 hover:text-[#FFEE00] flex items-center justify-center gap-2 mx-auto">
                         <i data-lucide="arrow-left" size="14"></i> Back to Store
                     </button>
                 </div>
@@ -354,35 +388,35 @@
     </div>
 
     <!-- Footer -->
-    <footer id="main-footer" class="bg-black border-t border-white/5 pt-20 pb-10 mt-20">
+    <footer id="main-footer" class="border-t border-zinc-100 dark:border-white/5 pt-20 pb-10 mt-20">
         <div class="max-w-7xl mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20 text-center md:text-left">
                 <div>
                     <h1 class="text-2xl font-black mb-6 uppercase">ESCAPE<span class="text-[#FFEE00]">YOUR</span>MIND</h1>
-                    <p class="text-gray-500 text-sm leading-relaxed mb-6 font-medium">For your confidence, by the confident. Based in Atlanta, shipping worldwide.</p>
+                    <p class="text-zinc-500 text-sm leading-relaxed mb-6 font-medium">For your confidence, by the confident. Based in Atlanta, shipping worldwide.</p>
                     <div class="flex gap-4 justify-center md:justify-start">
-                        <i data-lucide="instagram" class="text-gray-400 hover:text-[#FFEE00] cursor-pointer"></i>
-                        <i data-lucide="twitter" class="text-gray-400 hover:text-[#FFEE00] cursor-pointer"></i>
-                        <i data-lucide="facebook" class="text-gray-400 hover:text-[#FFEE00] cursor-pointer"></i>
+                        <i data-lucide="instagram" class="text-zinc-400 hover:text-[#FFEE00] cursor-pointer"></i>
+                        <i data-lucide="twitter" class="text-zinc-400 hover:text-[#FFEE00] cursor-pointer"></i>
+                        <i data-lucide="facebook" class="text-zinc-400 hover:text-[#FFEE00] cursor-pointer"></i>
                     </div>
                 </div>
                 <div>
                     <h4 class="font-black uppercase tracking-widest text-xs mb-8 text-[#FFEE00]">Shop</h4>
-                    <ul class="space-y-4 text-sm font-bold text-gray-400 uppercase">
-                        <li><button onclick="navigateTo('new_drop')" class="hover:text-white">New Arrivals</button></li>
-                        <li><button onclick="navigateTo('essentials')" class="hover:text-white">Bestsellers</button></li>
-                        <li><button onclick="navigateTo('accessories')" class="hover:text-white">Accessories</button></li>
+                    <ul class="space-y-4 text-sm font-bold text-zinc-500 uppercase">
+                        <li><button onclick="navigateTo('new_drop')" class="hover:text-[#FFEE00]">New Arrivals</button></li>
+                        <li><button onclick="navigateTo('essentials')" class="hover:text-[#FFEE00]">Bestsellers</button></li>
+                        <li><button onclick="navigateTo('accessories')" class="hover:text-[#FFEE00]">Accessories</button></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="font-black uppercase tracking-widest text-xs mb-8 text-[#FFEE00]">Support</h4>
-                    <ul class="space-y-4 text-sm font-bold text-gray-400 uppercase">
-                        <li><a href="#" class="hover:text-white">Track Order</a></li>
-                        <li><a href="#" class="hover:text-white">Shipping</a></li>
-                        <li><a href="#" class="hover:text-white">Returns</a></li>
+                    <ul class="space-y-4 text-sm font-bold text-zinc-500 uppercase">
+                        <li><a href="#" class="hover:text-[#FFEE00]">Track Order</a></li>
+                        <li><a href="#" class="hover:text-[#FFEE00]">Shipping</a></li>
+                        <li><a href="#" class="hover:text-[#FFEE00]">Returns</a></li>
                     </ul>
                 </div>
-                <div class="bg-zinc-900 p-6 border border-white/5">
+                <div class="bg-zinc-50 dark:bg-zinc-900 p-6 border border-zinc-100 dark:border-white/5">
                     <h4 class="font-black uppercase tracking-widest text-[10px] text-[#FFEE00] mb-4">Status</h4>
                     <div class="flex items-center gap-2 mb-2 justify-center md:justify-start">
                         <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
@@ -390,7 +424,7 @@
                     </div>
                 </div>
             </div>
-            <p class="text-[10px] font-bold text-gray-600 tracking-widest uppercase text-center">© 2026 Escape Your Mind Collective. All Rights Reserved.</p>
+            <p class="text-[10px] font-bold text-zinc-400 tracking-widest uppercase text-center">© 2026 Escape Your Mind Collective. All Rights Reserved.</p>
         </div>
     </footer>
 
@@ -403,6 +437,7 @@
         let isSignUp = false;
         let viewHistory = [];
         let pendingQuickAddId = null;
+        let isDarkMode = false;
 
         // Inventory - 1400x1400 High Quality
         const collection = [
@@ -454,6 +489,32 @@
         ];
 
         const productDesc = "Silence the noise. Step out of the cycle.\nOur signature hoodie is designed as a physical reminder to detach yourself from any thoughts or internal dialogue that limits your endless potential. With its heavyweight build that provides a sense of security and oversized fit that provides a sense of utmost comfort, this is more than a garment—it's a sanctuary.";
+
+        // Theme Handling
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('dark-mode', isDarkMode);
+            localStorage.setItem('oa_theme', isDarkMode ? 'dark' : 'light');
+            updateThemeIcon();
+        }
+
+        function updateThemeIcon() {
+            const icon = document.getElementById('theme-icon');
+            icon.setAttribute('data-lucide', isDarkMode ? 'sun' : 'moon');
+            lucide.createIcons();
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('oa_theme');
+            if (savedTheme === 'dark') {
+                isDarkMode = true;
+                document.body.classList.add('dark-mode');
+            } else {
+                isDarkMode = false;
+                document.body.classList.remove('dark-mode');
+            }
+            updateThemeIcon();
+        }
 
         // Persistence Helpers
         function saveProgress() {
@@ -556,16 +617,16 @@
             const inWishlist = wishlist.some(item => item.id === product.id);
             return `
                 <div class="group cursor-pointer" onclick="navigateTo('product_detail', '${product.id}')">
-                    <div class="relative aspect-square overflow-hidden bg-zinc-900 mb-4 product-image-container">
-                        <img src="${product.imgFront}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-80" loading="lazy">
-                        <img src="${product.imgBack}" class="absolute inset-0 w-full h-full object-cover secondary-image opacity-0 group-hover:opacity-80 transition-opacity duration-500">
+                    <div class="relative aspect-square overflow-hidden bg-zinc-100 dark:bg-zinc-900 mb-4 product-image-container">
+                        <img src="${product.imgFront}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-90" loading="lazy">
+                        <img src="${product.imgBack}" class="absolute inset-0 w-full h-full object-cover secondary-image opacity-0 group-hover:opacity-90 transition-opacity duration-500">
                         <div class="absolute top-4 right-4 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
-                            <button onclick="event.stopPropagation(); toggleWishlist('${product.id}')" class="bg-white text-black p-2 rounded-full hover:bg-[#FFEE00] shadow-xl">
+                            <button onclick="event.stopPropagation(); toggleWishlist('${product.id}')" class="bg-white text-black p-2 rounded-full hover:bg-[#FFEE00] shadow-xl transition-all">
                                 <i data-lucide="heart" size="18" class="${inWishlist ? 'fill-black' : ''}"></i>
                             </button>
                         </div>
                         <div class="absolute bottom-0 left-0 right-0 p-4 translate-y-full md:group-hover:translate-y-0 transition-transform duration-300">
-                            <button onclick="event.stopPropagation(); openSizeModal('${product.id}')" class="w-full bg-[#FFEE00] text-black py-3 font-black uppercase text-[10px] tracking-tighter flex items-center justify-center gap-2">
+                            <button onclick="event.stopPropagation(); openSizeModal('${product.id}')" class="w-full bg-[#FFEE00] text-black py-3 font-black uppercase text-[10px] tracking-tighter flex items-center justify-center gap-2 shadow-lg">
                                 Add to Bag <i data-lucide="shopping-bag" size="14"></i>
                             </button>
                         </div>
@@ -579,8 +640,8 @@
                         <p class="text-[8px] text-[#FFEE00] font-black uppercase tracking-[0.2em]">${product.category}</p>
                         <h4 class="font-bold text-xs md:text-sm uppercase group-hover:text-[#FFEE00] transition-colors leading-tight">${product.name}</h4>
                         <p class="font-mono text-xs">
-                            <span class="line-through text-zinc-600 mr-2">${product.oldPrice}</span>
-                            <span class="text-white">${product.price}</span>
+                            <span class="line-through text-zinc-400 mr-2">${product.oldPrice}</span>
+                            <span class="text-zinc-600 dark:text-zinc-300">${product.price}</span>
                         </p>
                     </div>
                 </div>
@@ -606,8 +667,8 @@
                 gridElement.classList.remove('grid');
                 gridElement.innerHTML = `
                     <div class="col-span-full py-24 text-center">
-                        <i data-lucide="info" class="mx-auto mb-6 text-zinc-700" size="48"></i>
-                        <p class="text-xl md:text-2xl font-black uppercase tracking-tighter text-zinc-500 px-4">Whoops! Nothing here yet, check back later.</p>
+                        <i data-lucide="info" class="mx-auto mb-6 text-zinc-300 dark:text-zinc-700" size="48"></i>
+                        <p class="text-xl md:text-2xl font-black uppercase tracking-tighter text-zinc-400 px-4">Whoops! Nothing here yet, check back later.</p>
                         <button onclick="handleBack()" class="mt-8 text-[#FFEE00] uppercase font-black tracking-widest text-xs hover:underline">Go Back</button>
                     </div>
                 `;
@@ -624,8 +685,8 @@
                 gridElement.classList.remove('grid');
                 gridElement.innerHTML = `
                     <div class="col-span-full py-24 text-center">
-                        <i data-lucide="heart" class="mx-auto mb-6 text-zinc-800" size="48"></i>
-                        <p class="text-xl md:text-2xl font-black uppercase tracking-tighter text-zinc-500">Your wishlist is empty.</p>
+                        <i data-lucide="heart" class="mx-auto mb-6 text-zinc-200 dark:text-zinc-800" size="48"></i>
+                        <p class="text-xl md:text-2xl font-black uppercase tracking-tighter text-zinc-400">Your wishlist is empty.</p>
                         <button onclick="navigateTo('home')" class="mt-8 text-[#FFEE00] uppercase font-black tracking-widest text-xs hover:underline">Return to Store</button>
                     </div>
                 `;
@@ -642,22 +703,22 @@
 
             const container = document.getElementById('view-product-detail');
             container.innerHTML = `
-                <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-500 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-12 transition-colors">
+                <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-400 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-12 transition-colors">
                     <i data-lucide="chevron-left" size="14"></i> Back
                 </button>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
                     <div class="space-y-6">
-                        <div class="relative aspect-square bg-zinc-900 overflow-hidden cursor-pointer group/mainimg" onclick="toggleProductImage('${product.imgFront}', '${product.imgBack}')">
+                        <div class="relative aspect-square bg-zinc-50 dark:bg-zinc-900 overflow-hidden cursor-pointer group/mainimg" onclick="toggleProductImage('${product.imgFront}', '${product.imgBack}')">
                             <img src="${product.imgFront}" id="main-product-img" class="w-full h-full object-cover transition-opacity duration-500">
                             <div class="absolute bottom-4 right-4 bg-black/50 backdrop-blur-md p-3 rounded-full opacity-0 group-hover/mainimg:opacity-100 transition-opacity">
                                 <i data-lucide="refresh-cw" class="text-white" size="20"></i>
                             </div>
                         </div>
                         <div class="flex gap-4 overflow-x-auto pb-2 custom-scroll">
-                            <button onclick="document.getElementById('main-product-img').src='${product.imgFront}'" class="w-20 min-w-[5rem] aspect-square bg-zinc-900 overflow-hidden border border-white/10 hover:border-[#FFEE00]">
+                            <button onclick="document.getElementById('main-product-img').src='${product.imgFront}'" class="w-20 min-w-[5rem] aspect-square bg-zinc-50 dark:bg-zinc-900 overflow-hidden border border-zinc-200 dark:border-white/10 hover:border-[#FFEE00]">
                                 <img src="${product.imgFront}" class="w-full h-full object-cover opacity-60 hover:opacity-100">
                             </button>
-                            <button onclick="document.getElementById('main-product-img').src='${product.imgBack}'" class="w-20 min-w-[5rem] aspect-square bg-zinc-900 overflow-hidden border border-white/10 hover:border-[#FFEE00]">
+                            <button onclick="document.getElementById('main-product-img').src='${product.imgBack}'" class="w-20 min-w-[5rem] aspect-square bg-zinc-50 dark:bg-zinc-900 overflow-hidden border border-zinc-200 dark:border-white/10 hover:border-[#FFEE00]">
                                 <img src="${product.imgBack}" class="w-full h-full object-cover opacity-60 hover:opacity-100">
                             </button>
                         </div>
@@ -666,13 +727,13 @@
                     <div class="flex flex-col">
                         <div class="flex justify-between items-start mb-4">
                             <p class="text-[#FFEE00] font-black uppercase tracking-[0.3em]">${product.category} COLLECTION</p>
-                            <button onclick="toggleWishlist('${product.id}')" class="text-white hover:text-[#FFEE00] transition-colors">
+                            <button onclick="toggleWishlist('${product.id}')" class="text-zinc-400 hover:text-[#FFEE00] transition-colors">
                                 <i data-lucide="heart" size="24" class="${wishlist.some(i => i.id === product.id) ? 'fill-[#FFEE00] text-[#FFEE00]' : ''}"></i>
                             </button>
                         </div>
                         <h1 class="text-3xl md:text-6xl font-black uppercase tracking-tighter mb-6 leading-tight">${product.name}</h1>
                         <p class="text-2xl md:text-3xl font-mono mb-12">
-                            <span class="line-through text-zinc-600 mr-4">${product.oldPrice}</span>
+                            <span class="line-through text-zinc-400 mr-4">${product.oldPrice}</span>
                             <span class="text-[#FFEE00]">${product.price}</span>
                         </p>
 
@@ -681,22 +742,22 @@
                                 <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-4">Select Size</p>
                                 <div class="flex flex-wrap gap-3" id="size-selector-detail">
                                     ${['S', 'M', 'L', 'XL', '2XL'].map(size => `
-                                        <button onclick="selectDetailSize(this, '${size}')" class="w-14 h-14 md:w-16 md:h-16 border border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase">${size}</button>
+                                        <button onclick="selectDetailSize(this, '${size}')" class="w-14 h-14 md:w-16 md:h-16 border border-zinc-200 dark:border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase">${size}</button>
                                     `).join('')}
                                 </div>
                             </div>
                         </div>
 
-                        <button id="add-to-bag-detail-btn" onclick="addToCartDetail('${product.id}')" class="w-full bg-[#FFEE00] text-black py-6 font-black uppercase tracking-tighter hover:bg-white transition-all transform hover:-translate-y-1 mb-12">
+                        <button id="add-to-bag-detail-btn" onclick="addToCartDetail('${product.id}')" class="w-full bg-[#FFEE00] text-black py-6 font-black uppercase tracking-tighter hover:bg-black hover:text-white transition-all transform hover:-translate-y-1 mb-12 shadow-xl">
                             Add to bag
                         </button>
 
                         <div class="space-y-12">
                             <div>
                                 <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-4">The Vision</p>
-                                <p class="text-zinc-300 leading-relaxed font-medium italic text-sm md:text-base">${productDesc.replace(/\n/g, '<br/>')}</p>
+                                <p class="text-zinc-500 dark:text-zinc-300 leading-relaxed font-medium italic text-sm md:text-base">${productDesc.replace(/\n/g, '<br/>')}</p>
                             </div>
-                            <div class="grid grid-cols-2 gap-8 pt-8 border-t border-white/5">
+                            <div class="grid grid-cols-2 gap-8 pt-8 border-t border-zinc-100 dark:border-white/5">
                                 <div>
                                     <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-2">Material</p>
                                     <p class="text-[10px] md:text-xs font-bold uppercase">100% Heavyweight Cotton</p>
@@ -717,10 +778,10 @@
         function selectDetailSize(btn, size) {
             document.querySelectorAll('#size-selector-detail button').forEach(b => {
                 b.classList.remove('bg-[#FFEE00]', 'text-black', 'border-[#FFEE00]');
-                b.classList.add('border-white/10');
+                b.classList.add('border-zinc-200', 'dark:border-white/10');
             });
             btn.classList.add('bg-[#FFEE00]', 'text-black', 'border-[#FFEE00]');
-            btn.classList.remove('border-white/10');
+            btn.classList.remove('border-zinc-200', 'dark:border-white/10');
             selectedDetailSize = size;
         }
 
@@ -738,7 +799,7 @@
                 selectedDetailSize = null;
                 document.querySelectorAll('#size-selector-detail button').forEach(b => {
                     b.classList.remove('bg-[#FFEE00]', 'text-black', 'border-[#FFEE00]');
-                    b.classList.add('border-white/10');
+                    b.classList.add('border-zinc-200', 'dark:border-white/10');
                 });
             }
         }
@@ -789,7 +850,7 @@
             const grid = document.getElementById('search-results-grid');
             if (!query) { grid.innerHTML = ''; return; }
             const filtered = collection.filter(item => item.name.toLowerCase().includes(query.toLowerCase()));
-            grid.innerHTML = filtered.length ? filtered.map(i => createProductCard(i)).join('') : '<p class="col-span-full text-zinc-500 uppercase font-black text-center py-20">No items found matching your query.</p>';
+            grid.innerHTML = filtered.length ? filtered.map(i => createProductCard(i)).join('') : '<p class="col-span-full text-zinc-400 uppercase font-black text-center py-20">No items found matching your query.</p>';
             lucide.createIcons();
         }
 
@@ -817,17 +878,17 @@
             const container = document.getElementById('cart-items-container');
             const footer = document.getElementById('cart-footer');
             if (cart.length === 0) {
-                container.innerHTML = `<div class="py-20 text-center border border-white/5 bg-zinc-950"><p class="text-zinc-500 uppercase font-black">Your bag is empty.</p></div>`;
+                container.innerHTML = `<div class="py-20 text-center border border-zinc-100 dark:border-white/5 bg-zinc-50 dark:bg-zinc-950"><p class="text-zinc-400 uppercase font-black">Your bag is empty.</p></div>`;
                 footer.classList.add('hidden');
             } else {
                 container.innerHTML = cart.map(item => `
-                    <div class="flex gap-4 md:gap-6 items-center border-b border-white/5 pb-6">
-                        <div class="w-16 h-16 md:w-20 md:h-20 bg-zinc-900 overflow-hidden"><img src="${item.imgFront}" class="w-full h-full object-cover"></div>
+                    <div class="flex gap-4 md:gap-6 items-center border-b border-zinc-100 dark:border-white/5 pb-6">
+                        <div class="w-16 h-16 md:w-20 md:h-20 bg-zinc-50 dark:bg-zinc-900 overflow-hidden"><img src="${item.imgFront}" class="w-full h-full object-cover"></div>
                         <div class="flex-grow">
                             <h4 class="font-bold uppercase tracking-tight text-xs md:text-sm leading-tight">${item.name}</h4>
                             <p class="text-zinc-500 font-mono text-[10px] mt-1">Size: ${item.size} — ${item.price}</p>
                         </div>
-                        <button onclick="removeFromCart(${item.cartId})" class="text-zinc-500 hover:text-red-500"><i data-lucide="trash-2" size="18"></i></button>
+                        <button onclick="removeFromCart(${item.cartId})" class="text-zinc-400 hover:text-red-500"><i data-lucide="trash-2" size="18"></i></button>
                     </div>
                 `).join('');
                 footer.classList.remove('hidden');
@@ -844,6 +905,7 @@
         });
 
         window.onload = () => {
+            loadTheme();
             loadProgress();
             document.getElementById('essentials-preview-grid').innerHTML = collection.slice(0, 4).map(e => createProductCard(e)).join('');
             lucide.createIcons();
