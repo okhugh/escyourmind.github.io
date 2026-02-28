@@ -128,6 +128,12 @@
             transform: scale(0.9);
         }
 
+        /* Themed Components */
+        .bg-themed-secondary {
+            background-color: var(--bg-secondary) !important;
+            transition: background-color 0.3s ease;
+        }
+
         /* Fixed specific black elements for light mode compatibility */
         .bg-zinc-950 { background-color: var(--bg-secondary) !important; }
         .bg-zinc-900 { background-color: var(--bg-secondary) !important; }
@@ -207,7 +213,7 @@
     </nav>
 
     <!-- Mobile Menu -->
-    <div id="mobile-menu" class="fixed inset-0 z-[60] p-6 mobile-menu">
+    <div id="mobile-menu" class="fixed inset-0 z-[60] p-6 mobile-menu shadow-2xl">
         <div class="flex justify-between items-center mb-12">
             <h1 class="text-xl font-black uppercase">ESCAPE<span class="text-[#FFEE00]">YOUR</span>MIND</h1>
             <button onclick="toggleMenu(false)"><i data-lucide="x" size="32"></i></button>
@@ -233,7 +239,7 @@
                     <div class="absolute inset-0 hero-gradient"></div>
                 </div>
                 <div class="relative z-10 max-w-7xl mx-auto px-6 w-full mt-20 text-center md:text-left">
-                    <p class="text-[#FFEE00] font-black uppercase tracking-[0.3em] mb-4 text-xs md:text-sm animate-pulse">F/W 2026 DROP NOW LIVE</p>
+                    <p class="text-[#FFEE00] font-bold uppercase tracking-[0.3em] mb-4 text-xs md:text-sm animate-pulse">F/W 2026 DROP NOW LIVE</p>
                     <h2 class="text-5xl md:text-9xl font-black uppercase leading-[0.85] mb-8 tracking-tighter">LUCID<br /><span class="text-[#FFEE00]">BODY.</span></h2>
                     <button onclick="navigateTo('new_drop')" class="bg-[#FFEE00] text-black px-10 py-5 font-black uppercase tracking-tighter hover:bg-black hover:text-white transition-all transform hover:-translate-y-1 flex items-center gap-2 group mx-auto md:mx-0">
                         Shop Collection <i data-lucide="arrow-right" size="20"></i>
@@ -243,7 +249,7 @@
 
             <!-- Categories Grid -->
             <section class="py-24 max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div onclick="navigateTo('outerwear')" class="group relative aspect-square overflow-hidden cursor-pointer bg-zinc-100">
+                <div onclick="navigateTo('outerwear')" class="group relative aspect-square overflow-hidden cursor-pointer bg-themed-secondary">
                     <img src="https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&q=80&w=1400" class="w-full h-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105" />
                     <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors"></div>
                     <div class="absolute bottom-8 left-8">
@@ -251,7 +257,7 @@
                         <div class="w-12 h-1 bg-[#FFEE00] mt-2 group-hover:w-full transition-all duration-500"></div>
                     </div>
                 </div>
-                <div onclick="navigateTo('streetwear')" class="group relative aspect-square overflow-hidden cursor-pointer bg-zinc-100">
+                <div onclick="navigateTo('streetwear')" class="group relative aspect-square overflow-hidden cursor-pointer bg-themed-secondary">
                     <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=1400" class="w-full h-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105" />
                     <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors"></div>
                     <div class="absolute bottom-8 left-8">
@@ -259,7 +265,7 @@
                         <div class="w-12 h-1 bg-[#FFEE00] mt-2 group-hover:w-full transition-all duration-500"></div>
                     </div>
                 </div>
-                <div onclick="navigateTo('accessories')" class="group relative aspect-square overflow-hidden cursor-pointer bg-zinc-100">
+                <div onclick="navigateTo('accessories')" class="group relative aspect-square overflow-hidden cursor-pointer bg-themed-secondary">
                     <img src="https://images.unsplash.com/photo-1509100194014-d49809396daa?auto=format&fit=crop&q=80&w=1400" class="w-full h-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105" />
                     <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors"></div>
                     <div class="absolute bottom-8 left-8">
@@ -270,7 +276,7 @@
             </section>
 
             <!-- Essentials Preview -->
-            <section class="py-24 bg-zinc-50 dark:bg-[#0a0a0a]">
+            <section class="py-24 bg-themed-secondary">
                 <div class="max-w-7xl mx-auto px-6">
                     <div class="flex justify-between items-end mb-12">
                         <div>
@@ -416,7 +422,7 @@
                         <li><a href="#" class="hover:text-[#FFEE00]">Returns</a></li>
                     </ul>
                 </div>
-                <div class="bg-zinc-50 dark:bg-zinc-900 p-6 border border-zinc-100 dark:border-white/5">
+                <div class="bg-themed-secondary p-6 border border-zinc-100 dark:border-white/5">
                     <h4 class="font-black uppercase tracking-widest text-[10px] text-[#FFEE00] mb-4">Status</h4>
                     <div class="flex items-center gap-2 mb-2 justify-center md:justify-start">
                         <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
@@ -617,7 +623,7 @@
             const inWishlist = wishlist.some(item => item.id === product.id);
             return `
                 <div class="group cursor-pointer" onclick="navigateTo('product_detail', '${product.id}')">
-                    <div class="relative aspect-square overflow-hidden bg-zinc-100 dark:bg-zinc-900 mb-4 product-image-container">
+                    <div class="relative aspect-square overflow-hidden bg-themed-secondary mb-4 product-image-container">
                         <img src="${product.imgFront}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-90" loading="lazy">
                         <img src="${product.imgBack}" class="absolute inset-0 w-full h-full object-cover secondary-image opacity-0 group-hover:opacity-90 transition-opacity duration-500">
                         <div class="absolute top-4 right-4 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
@@ -708,17 +714,17 @@
                 </button>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
                     <div class="space-y-6">
-                        <div class="relative aspect-square bg-zinc-50 dark:bg-zinc-900 overflow-hidden cursor-pointer group/mainimg" onclick="toggleProductImage('${product.imgFront}', '${product.imgBack}')">
+                        <div class="relative aspect-square bg-themed-secondary overflow-hidden cursor-pointer group/mainimg" onclick="toggleProductImage('${product.imgFront}', '${product.imgBack}')">
                             <img src="${product.imgFront}" id="main-product-img" class="w-full h-full object-cover transition-opacity duration-500">
                             <div class="absolute bottom-4 right-4 bg-black/50 backdrop-blur-md p-3 rounded-full opacity-0 group-hover/mainimg:opacity-100 transition-opacity">
                                 <i data-lucide="refresh-cw" class="text-white" size="20"></i>
                             </div>
                         </div>
                         <div class="flex gap-4 overflow-x-auto pb-2 custom-scroll">
-                            <button onclick="document.getElementById('main-product-img').src='${product.imgFront}'" class="w-20 min-w-[5rem] aspect-square bg-zinc-50 dark:bg-zinc-900 overflow-hidden border border-zinc-200 dark:border-white/10 hover:border-[#FFEE00]">
+                            <button onclick="document.getElementById('main-product-img').src='${product.imgFront}'" class="w-20 min-w-[5rem] aspect-square bg-themed-secondary overflow-hidden border border-zinc-200 dark:border-white/10 hover:border-[#FFEE00]">
                                 <img src="${product.imgFront}" class="w-full h-full object-cover opacity-60 hover:opacity-100">
                             </button>
-                            <button onclick="document.getElementById('main-product-img').src='${product.imgBack}'" class="w-20 min-w-[5rem] aspect-square bg-zinc-50 dark:bg-zinc-900 overflow-hidden border border-zinc-200 dark:border-white/10 hover:border-[#FFEE00]">
+                            <button onclick="document.getElementById('main-product-img').src='${product.imgBack}'" class="w-20 min-w-[5rem] aspect-square bg-themed-secondary overflow-hidden border border-zinc-200 dark:border-white/10 hover:border-[#FFEE00]">
                                 <img src="${product.imgBack}" class="w-full h-full object-cover opacity-60 hover:opacity-100">
                             </button>
                         </div>
@@ -883,9 +889,9 @@
             } else {
                 container.innerHTML = cart.map(item => `
                     <div class="flex gap-4 md:gap-6 items-center border-b border-zinc-100 dark:border-white/5 pb-6">
-                        <div class="w-16 h-16 md:w-20 md:h-20 bg-zinc-50 dark:bg-zinc-900 overflow-hidden"><img src="${item.imgFront}" class="w-full h-full object-cover"></div>
+                        <div class="w-16 h-16 md:w-20 md:h-20 bg-themed-secondary overflow-hidden"><img src="${item.imgFront}" class="w-full h-full object-cover"></div>
                         <div class="flex-grow">
-                            <h4 class="font-bold uppercase tracking-tight text-xs md:text-sm leading-tight">${item.name}</h4>
+                            <h4 class="font-bold uppercase tracking-tight text-xs md:text-sm leading-tight text-primary">${item.name}</h4>
                             <p class="text-zinc-500 font-mono text-[10px] mt-1">Size: ${item.size} — ${item.price}</p>
                         </div>
                         <button onclick="removeFromCart(${item.cartId})" class="text-zinc-400 hover:text-red-500"><i data-lucide="trash-2" size="18"></i></button>
