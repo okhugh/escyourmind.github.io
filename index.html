@@ -54,7 +54,7 @@
             border-color: #52525b !important;
         }
 
-        /* Desktop Flashlight Overlay - Refined for pitch black immersion */
+        /* Desktop Flashlight Overlay - Adjusted to 30% Opacity as requested */
         #flashlight-overlay {
             position: fixed;
             top: 0;
@@ -63,14 +63,13 @@
             height: 100vh;
             pointer-events: none;
             z-index: 115;
-            opacity: 35;
+            opacity: 0;
             transition: opacity 0.6s ease;
             background: radial-gradient(
                 circle 350px at var(--flashlight-x) var(--flashlight-y),
                 transparent 0%,
-                rgba(0, 0, 0, 0.6) 40%,
-                rgba(0, 0, 0, 0.95) 80%,
-                #000000 100%
+                rgba(0, 0, 0, 0.15) 50%,
+                rgba(0, 0, 0, 0.3) 100%
             );
         }
 
@@ -217,11 +216,11 @@
     <!-- Size Selection Modal -->
     <div id="size-modal" class="fixed inset-0 z-[140] flex items-center justify-center p-6 hidden">
         <div class="absolute inset-0 modal-overlay" onclick="closeSizeModal()"></div>
-        <div class="relative bg-zinc-950 border border-white/10 p-8 max-w-sm w-full text-center shadow-2xl">
-            <h3 class="text-xl font-black uppercase tracking-tighter mb-2 text-primary">Select Size</h3>
+        <div class="relative bg-zinc-950 border border-white/10 p-8 max-w-sm w-full text-center shadow-2xl text-primary">
+            <h3 class="text-xl font-black uppercase tracking-tighter mb-2">Select Size</h3>
             <p id="size-modal-product-name" class="text-[10px] text-zinc-500 uppercase font-black mb-8"></p>
             
-            <div class="grid grid-cols-3 gap-3 mb-8 text-primary">
+            <div class="grid grid-cols-3 gap-3 mb-8">
                 <button onclick="confirmQuickAdd('S')" class="h-12 border border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase">S</button>
                 <button onclick="confirmQuickAdd('M')" class="h-12 border border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase">M</button>
                 <button onclick="confirmQuickAdd('L')" class="h-12 border border-white/10 flex items-center justify-center font-black hover:border-[#FFEE00] hover:text-[#FFEE00] transition-colors uppercase">L</button>
@@ -269,9 +268,9 @@
                     <i data-lucide="user" size="20"></i>
                     <span class="text-xs font-bold uppercase tracking-tighter hidden lg:block">Login</span>
                 </button>
-                <button id="cart-nav-btn" onclick="navigateTo('cart')" class="relative group p-1">
+                <button id="cart-nav-btn" onclick="navigateTo('cart')" class="relative group p-1 text-primary">
                     <i data-lucide="shopping-bag" size="20" class="group-hover:text-[#FFEE00] transition-colors"></i>
-                    <span id="cart-count" class="absolute -top-2 -right-2 bg-[#FFEE00] text-black text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">{cart.length}</span>
+                    <span id="cart-count" class="absolute -top-2 -right-2 bg-[#FFEE00] text-black text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">0</span>
                 </button>
             </div>
         </div>
@@ -374,13 +373,13 @@
         </section>
 
         <!-- Coming Soon View -->
-        <section id="view-coming_soon" class="view-section py-32 px-4 md:px-6 max-w-7xl mx-auto min-h-screen text-primary">
+        <section id="view-coming_soon" class="view-section py-32 px-4 md:px-6 max-w-7xl mx-auto min-h-screen text-primary font-black">
             <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-400 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-8 transition-colors">
                 <i data-lucide="chevron-left" size="14"></i> Back
             </button>
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-8">
                 <div>
-                    <h2 class="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-2 text-primary font-black">Coming Soon</h2>
+                    <h2 class="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-2 text-primary">Coming Soon</h2>
                     <p class="text-zinc-500 uppercase font-black text-xs tracking-widest text-primary">Next Drop Access Restricted</p>
                 </div>
                 <div class="flex gap-4 md:gap-8 bg-zinc-100 dark:bg-zinc-900 p-4 px-6 md:px-10 rounded-sm shadow-xl border border-zinc-200 dark:border-white/5">
@@ -404,16 +403,16 @@
             </div>
             <div class="w-full h-1 bg-zinc-100 dark:bg-zinc-900 mb-12"></div>
             <div id="coming-soon-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-x-4 md:gap-x-6 gap-y-10 md:gap-y-12">
-                <!-- After Hours Items Loaded by JS -->
+                <!-- Loaded by JS -->
             </div>
         </section>
 
         <!-- Wishlist View -->
-        <section id="view-wishlist" class="view-section py-32 px-4 md:px-6 max-w-7xl mx-auto min-h-screen text-primary">
+        <section id="view-wishlist" class="view-section py-32 px-4 md:px-6 max-w-7xl mx-auto min-h-screen text-primary font-black">
             <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-400 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-8 transition-colors">
                 <i data-lucide="chevron-left" size="14"></i> Back
             </button>
-            <h2 class="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-4 text-primary font-black">Wishlist</h2>
+            <h2 class="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-4 text-primary">Wishlist</h2>
             <div class="w-20 h-2 bg-[#FFEE00] mb-12"></div>
             <div id="wishlist-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-x-4 md:gap-x-6 gap-y-10 md:gap-y-12">
                 <!-- Loaded by JS -->
@@ -435,7 +434,7 @@
         </section>
 
         <!-- Cart View -->
-        <section id="view-cart" class="view-section py-32 px-4 md:px-6 max-w-3xl mx-auto min-h-screen text-primary">
+        <section id="view-cart" class="view-section py-32 px-4 md:px-6 max-w-3xl mx-auto min-h-screen text-primary font-black">
             <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-400 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-8 transition-colors">
                 <i data-lucide="chevron-left" size="14"></i> Back
             </button>
@@ -456,7 +455,7 @@
                 <button onclick="handleBack()" class="flex items-center gap-2 text-zinc-400 hover:text-[#FFEE00] uppercase font-black text-[10px] tracking-widest mb-12 transition-colors">
                     <i data-lucide="chevron-left" size="14"></i> Back
                 </button>
-                <div class="text-center mb-12 text-primary">
+                <div class="text-center mb-12">
                     <h2 id="auth-title" class="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-4 font-black">MEMBER<br/><span class="text-[#FFEE00]">ACCESS</span></h2>
                     <p id="auth-subtitle" class="text-zinc-500 font-bold tracking-widest text-xs uppercase">Enter your credentials to continue.</p>
                 </div>
@@ -570,14 +569,14 @@
 
         const allInventory = [...collection, ...comingSoon];
 
-        // Global Mouse Flashlight Tracking
+        // Global Mouse Flashlight
         function updateFlashlightCoords(e) {
             document.documentElement.style.setProperty('--flashlight-x', e.clientX + 'px');
             document.documentElement.style.setProperty('--flashlight-y', e.clientY + 'px');
         }
         window.addEventListener('mousemove', updateFlashlightCoords);
 
-        // State Persistence
+        // Persistence Helpers
         function saveProgress() {
             localStorage.setItem('oa_cart', JSON.stringify(cart));
             localStorage.setItem('oa_wishlist', JSON.stringify(wishlist));
@@ -826,7 +825,7 @@
                     <div class="flex flex-col text-primary">
                         <div class="flex flex-col gap-2 mb-4">
                             <div class="flex items-center gap-4">
-                                <p class="text-[#FFEE00] font-black uppercase tracking-[0.3em] font-black font-black">${product.category}</p>
+                                <p class="text-[#FFEE00] font-black uppercase tracking-[0.3em] font-black font-black font-black">${product.category}</p>
                                 ${product.isSpecial ? `<span class="bg-[#FFEE00] text-black text-[8px] font-black px-2 py-0.5 uppercase tracking-tighter">Special Edition Colorway</span>` : ''}
                                 ${productId.startsWith('ah') ? `<span class="bg-white text-black text-[8px] font-black px-2 py-0.5 uppercase tracking-tighter border border-white/10">LTD SUPPLY: ${product.units}</span>` : ''}
                             </div>
@@ -844,8 +843,8 @@
                         </div>
                         <button id="add-to-bag-detail-btn" onclick="addToCartDetail('${product.id}')" class="w-full bg-[#FFEE00] text-black py-6 font-black uppercase tracking-tighter hover:bg-black hover:text-white transition-all transform hover:-translate-y-1 mb-12 shadow-xl font-black">Add to bag</button>
                         <div class="space-y-12 text-primary font-black">
-                            <div><p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-4">The Vision</p><p class="text-zinc-500 dark:text-zinc-300 leading-relaxed font-medium italic text-sm md:text-base">${(product.desc || sanctuaryDesc).replace(/\n/g, '<br/>')}</p></div>
-                            <div class="grid grid-cols-2 gap-8 pt-8 border-t border-zinc-100 dark:border-white/5"><div><p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-2">Material</p><p class="text-[10px] md:text-xs font-bold uppercase text-primary font-bold font-black">${product.material || "100% Heavyweight Cotton"}</p></div><div><p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-2">Print</p><p class="text-[10px] md:text-xs font-bold uppercase text-primary font-bold font-black">Eco-friendly Water-based</p></div></div>
+                            <div><p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-4 font-black">The Vision</p><p class="text-zinc-500 dark:text-zinc-300 leading-relaxed font-medium italic text-sm md:text-base">${(product.desc || sanctuaryDesc).replace(/\n/g, '<br/>')}</p></div>
+                            <div class="grid grid-cols-2 gap-8 pt-8 border-t border-zinc-100 dark:border-white/5"><div><p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-2 font-black">Material</p><p class="text-[10px] md:text-xs font-bold uppercase text-primary font-bold font-black">${product.material || "100% Heavyweight Cotton"}</p></div><div><p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-2 font-black">Print</p><p class="text-[10px] md:text-xs font-bold uppercase text-primary font-bold font-black">Eco-friendly Water-based</p></div></div>
                         </div>
                     </div>
                 </div>
@@ -871,7 +870,7 @@
             const grid = document.getElementById('search-results-grid');
             if (!query) { grid.innerHTML = ''; return; }
             const filtered = allInventory.filter(item => item.name.toLowerCase().includes(query.toLowerCase()));
-            grid.innerHTML = filtered.length ? filtered.map(i => createProductCard(i)).join('') : '<p class="col-span-full text-zinc-400 uppercase font-black text-center py-20 text-primary">No items found.</p>';
+            grid.innerHTML = filtered.length ? filtered.map(i => createProductCard(i)).join('') : '<p class="col-span-full text-zinc-400 uppercase font-black text-center py-20 text-primary">No items found matching your query.</p>';
             lucide.createIcons();
         }
 
@@ -903,8 +902,8 @@
                     <div class="flex gap-4 md:gap-6 items-center border-b border-zinc-100 dark:border-white/5 pb-6 text-primary font-black">
                         <div class="w-16 h-16 md:w-20 md:h-20 bg-themed-secondary overflow-hidden"><img src="${item.imgFront}" class="w-full h-full object-cover ${item.id.startsWith('ah') ? 'grayscale' : ''}"></div>
                         <div class="flex-grow text-primary font-black">
-                            <h4 class="font-bold uppercase tracking-tight text-xs md:text-sm leading-tight font-bold font-black">${item.name}</h4>
-                            <p class="text-zinc-500 font-mono text-[10px] mt-1 uppercase tracking-tighter font-black">Size: ${item.size} — ${item.price}</p>
+                            <h4 class="font-bold uppercase tracking-tight text-xs md:text-sm leading-tight font-bold font-black font-black">${item.name}</h4>
+                            <p class="text-zinc-500 font-mono text-[10px] mt-1 uppercase tracking-tighter font-black font-black">Size: ${item.size} — ${item.price}</p>
                         </div>
                         <button onclick="removeFromCart(${item.cartId})" class="text-zinc-400 hover:text-red-500 transition-colors"><i data-lucide="trash-2" size="18"></i></button>
                     </div>
