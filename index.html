@@ -849,9 +849,25 @@
             if (viewId === 'outerwear') filtered = collection.filter(p => !p.isSweatpants);
             if (viewId === 'accessories') filtered = [];
 
+            // Updated logic to distinguish between Accessories and other empty states
             if (viewId === 'accessories' || (viewId === 'outerwear' && filtered.length === 0)) {
                 gridElement.classList.remove('grid');
-                gridElement.innerHTML = `<div class="col-span-full py-24 text-center text-primary"><i data-lucide="info" class="mx-auto mb-6 text-zinc-300 dark:text-zinc-700" size="48"></i><p class="text-xl md:text-2xl font-black uppercase tracking-tighter text-zinc-400 px-4 font-black">Your wishlist is empty.</p><button onclick="handleBack()" class="mt-8 text-[#FFEE00] uppercase font-black tracking-widest text-xs hover:underline">Go Back</button></div>`;
+                
+                // Define the message based on the view
+                const emptyMessage = viewId === 'accessories' 
+                    ? "Whoops! No items here yet, check back soon!" 
+                    : "Your wishlist is empty.";
+
+                gridElement.innerHTML = `
+                    <div class="col-span-full py-24 text-center text-primary">
+                        <i data-lucide="info" class="mx-auto mb-6 text-zinc-300 dark:text-zinc-700" size="48"></i>
+                        <p class="text-xl md:text-2xl font-black uppercase tracking-tighter text-zinc-400 px-4 font-black">
+                            ${emptyMessage}
+                        </p>
+                        <button onclick="handleBack()" class="mt-8 text-[#FFEE00] uppercase font-black tracking-widest text-xs hover:underline">
+                            Go Back
+                        </button>
+                    </div>`;
             } else {
                 gridElement.classList.add('grid');
                 gridElement.innerHTML = filtered.map(p => createProductCard(p)).join('');
