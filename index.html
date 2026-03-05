@@ -74,7 +74,8 @@
             color: #e2e2e2 !important;
         }
         .after-hours-theme img {
-            filter: grayscale(1) !important;
+            /* Removed grayscale filter as requested */
+            filter: none !important;
         }
         .after-hours-theme .text-primary {
             color: #ffffff !important;
@@ -636,7 +637,6 @@
 
         // Inventory
         const collection = [
-            { id: 'h3', name: '"PINE SOLACE" LUCID ESCAPE HOODIE', price: '$49.80', oldPrice: '$60.00', category: 'F/W 2026', imgFront: 'lucid_pine_solace_hoodie_FRONT.png', imgBack: 'lucid_pine_solace_hoodie_BACK.png', desc: sanctuaryDesc + "\n\n This pine-inspired palette is a special edition release.", isSpecial: true },
             { id: 'h1', name: '"DOPAMINE RUSH" LUCID ESCAPE HOODIE', price: '$49.80', oldPrice: '$60.00', category: 'F/W 2026', imgFront: 'lucid_dopamine_rush_hoodie_FRONT.png', imgBack: 'lucid_dopamine_rush_hoodie_BACK.png', desc: sanctuaryDesc },
             { id: 'h2', name: '"CONCRETE FOG" LUCID ESCAPE HOODIE', price: '$49.80', oldPrice: '$60.00', category: 'F/W 2026', imgFront: 'lucid_concrete_fog_hoodie_FRONT.png', imgBack: 'lucid_concrete_fog_hoodie_BACK.png', desc: sanctuaryDesc },
             { id: 'h4', name: '"VOID" LUCID ESCAPE HOODIE', price: '$49.80', oldPrice: '$60.00', category: 'F/W 2026', imgFront: 'lucid_void_hoodie_FRONT.png', imgBack: 'lucid_void_hoodie_BACK.png', desc: sanctuaryDesc },
@@ -872,8 +872,8 @@
             return `
                 <div class="group cursor-pointer" onclick="navigateTo('product_detail', '${product.id}')">
                     <div class="relative aspect-square overflow-hidden bg-themed-secondary mb-4 product-image-container shadow-sm">
-                        <img src="${product.imgFront}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-90 ${isAH ? 'grayscale' : ''}" loading="lazy">
-                        <img src="${product.imgBack}" class="absolute inset-0 w-full h-full object-cover secondary-image opacity-0 group-hover:opacity-90 transition-opacity duration-500 ${isAH ? 'grayscale' : ''}">
+                        <img src="${product.imgFront}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-90" loading="lazy">
+                        <img src="${product.imgBack}" class="absolute inset-0 w-full h-full object-cover secondary-image opacity-0 group-hover:opacity-90 transition-opacity duration-500">
                         <div class="absolute top-2 left-2 flex flex-col gap-1">
                             ${isAH ? `<span class="bg-black text-white text-[7px] font-black px-2 py-1 uppercase tracking-widest border border-white/10">Ltd: ${product.units} Units</span>` : ''}
                             ${product.isSpecial ? `<span class="bg-[#FFEE00] text-black text-[7px] font-black px-2 py-1 uppercase tracking-widest">Special Ed.</span>` : ''}
@@ -1034,7 +1034,7 @@
             } else {
                 container.innerHTML = cart.map(item => `
                     <div class="flex gap-4 md:gap-6 items-center border-b border-zinc-100 dark:border-white/5 pb-6 text-primary font-black font-black">
-                        <div class="w-16 h-16 md:w-20 md:h-20 bg-themed-secondary overflow-hidden"><img src="${item.imgFront}" class="w-full h-full object-cover ${item.id.startsWith('ah') ? 'grayscale' : ''}"></div>
+                        <div class="w-16 h-16 md:w-20 md:h-20 bg-themed-secondary overflow-hidden"><img src="${item.imgFront}" class="w-full h-full object-cover"></div>
                         <div class="flex-grow text-primary font-black font-black font-black">
                             <h4 class="font-bold uppercase tracking-tight text-xs md:text-sm leading-tight font-bold font-black font-black font-black">${item.name}</h4>
                             <p class="text-zinc-500 font-mono text-[10px] mt-1 uppercase tracking-tighter font-black font-black font-black font-black font-black">Size: ${item.size} — ${item.price}</p>
