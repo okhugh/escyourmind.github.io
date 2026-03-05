@@ -1,6 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- GATEKEEPER STYLE START -->
+    <style id="gatekeeper-core-style">
+        #access-portal {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 999999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        .portal-input {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #27272a;
+            outline: none;
+            text-align: center;
+            font-size: 1.5rem;
+            letter-spacing: 0.3em;
+            padding: 10px;
+            width: 300px;
+            transition: border-color 0.3s ease;
+            color: #FFEE00;
+            font-weight: 900;
+            margin-top: 2rem;
+        }
+        .portal-input:focus { border-color: #FFEE00; }
+        .portal-input::placeholder { color: #27272a; font-size: 0.8rem; letter-spacing: 0.5em; }
+        #main-content-wrapper { display: none; }
+        .shake { animation: gate-shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes gate-shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+    </style>
+    <!-- GATEKEEPER STYLE END -->
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ESCAPE YOUR MIND | Official Store</title>
@@ -202,6 +245,25 @@
     </style>
 </head>
 <body class="custom-scroll">
+
+    <!-- ACCESS PORTAL START -->
+    <div id="access-portal">
+        <div class="max-w-md w-full px-6 text-center">
+            <h1 class="text-4xl font-black tracking-tighter uppercase italic">
+                ESCAPE<span class="text-[#FFEE00]">YOUR</span>MIND
+            </h1>
+            <p class="text-[10px] font-black tracking-[0.4em] text-zinc-500 uppercase mt-4">Authorized Access Only</p>
+            <input type="password" id="gatekeeper-input" class="portal-input" placeholder="ACCESS CODE" autocomplete="off">
+            <div id="gatekeeper-error" class="text-[9px] font-bold text-red-500 uppercase tracking-widest mt-4 opacity-0">Incorrect Code. Mind remains trapped.</div>
+            <div class="mt-20">
+                <p class="text-[8px] font-bold text-zinc-600 uppercase tracking-widest">© 2026 EYM Collective. Secure Vault.</p>
+            </div>
+        </div>
+    </div>
+    <!-- ACCESS PORTAL END -->
+
+    <!-- WRAPPER FOR ORIGINAL CONTENT START -->
+    <div id="main-content-wrapper">
 
     <!-- Flashlight Layer -->
     <div id="flashlight-overlay"></div>
@@ -547,7 +609,49 @@
         </div>
     </footer>
 
+    </div>
+    <!-- WRAPPER FOR ORIGINAL CONTENT END -->
+
     <script>
+        // GATEKEEPER LOGIC START
+        // Encoded password "EYMTE_M26" -> "RVlNVEVfTTI2"
+        (function() {
+            const portal = document.getElementById('access-portal');
+            const wrapper = document.getElementById('main-content-wrapper');
+            const input = document.getElementById('gatekeeper-input');
+            const error = document.getElementById('gatekeeper-error');
+            const HASH = "RVlNVEVfTTI2";
+
+            function unlock() {
+                portal.style.opacity = '0';
+                portal.style.visibility = 'hidden';
+                wrapper.style.display = 'block';
+                document.body.style.overflow = 'auto';
+                setTimeout(() => portal.remove(), 600);
+            }
+
+            if (sessionStorage.getItem('eym_v') === 'authorized') {
+                unlock();
+            } else {
+                document.body.style.overflow = 'hidden';
+            }
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    if (btoa(input.value) === HASH) {
+                        sessionStorage.setItem('eym_v', 'authorized');
+                        unlock();
+                    } else {
+                        portal.classList.add('shake');
+                        error.style.opacity = '1';
+                        input.value = '';
+                        setTimeout(() => portal.classList.remove('shake'), 500);
+                    }
+                }
+            });
+        })();
+        // GATEKEEPER LOGIC END
+
         // State
         let currentView = 'home';
         let currentProductId = null;
@@ -557,6 +661,7 @@
         let viewHistory = [];
         let pendingQuickAddId = null;
         let isDarkMode = false;
+        let selectedDetailSize = null;
 
         const sanctuaryDesc = "Silence the noise. Step out of the cycle. \n\n Our signature hoodie is designed as a physical reminder to detach yourself from any thoughts or internal dialogue that limits your endless potential. With its heavyweight build that provides a sense of security and oversized fit that provides a sense of utmost comfort, this is more than a garment—it's a sanctuary.";
         
@@ -605,11 +710,6 @@
 
         // Live Countdown Logic
         function startCountdown() {
-            /** * GUIDE: HOW TO SET YOUR DROP DATE
-             * 1. Locate the variable 'dropDateString' below.
-             * 2. Change the string to your desired date and time.
-             * 3. Format: "Month Day, Year HH:MM:SS" (e.g., "April 20, 2026 14:30:00")
-             */
             const dropDateString = "December 26, 2026 00:00:00";
             const dropDate = new Date(dropDateString).getTime();
 
@@ -849,11 +949,8 @@
             if (viewId === 'outerwear') filtered = collection.filter(p => !p.isSweatpants);
             if (viewId === 'accessories') filtered = [];
 
-            // Updated logic to distinguish between Accessories and other empty states
             if (viewId === 'accessories' || (viewId === 'outerwear' && filtered.length === 0)) {
                 gridElement.classList.remove('grid');
-                
-                // Define the message based on the view
                 const emptyMessage = viewId === 'accessories' 
                     ? "Whoops! No items here yet, check back soon!" 
                     : "Your wishlist is empty.";
