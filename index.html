@@ -387,37 +387,6 @@
                 </div>
             </div>
 
-            <!-- Categories Grid -->
-            <section class="py-24 max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div onclick="navigateTo('outerwear')" class="group relative aspect-square overflow-hidden cursor-pointer bg-themed-secondary">
-                    <!-- OUTERWEAR COVER GOES HERE -->
-                    <img src="" class="w-full h-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105" />
-                    <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors"></div>
-                    <div class="absolute bottom-8 left-8">
-                        <h3 class="text-2xl font-black uppercase text-white">Outerwear</h3>
-                        <div class="w-12 h-1 bg-[#FFEE00] mt-2 group-hover:w-full transition-all duration-500"></div>
-                    </div>
-                </div>
-                <div onclick="navigateTo('streetwear')" class="group relative aspect-square overflow-hidden cursor-pointer bg-themed-secondary">
-                    <!-- STREETWEAR COVER GOES HERE -->
-                    <img src="" class="w-full h-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105" />
-                    <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors"></div>
-                    <div class="absolute bottom-8 left-8">
-                        <h3 class="text-2xl font-black uppercase text-white">Streetwear</h3>
-                        <div class="w-12 h-1 bg-[#FFEE00] mt-2 group-hover:w-full transition-all duration-500"></div>
-                    </div>
-                </div>
-                <div onclick="navigateTo('accessories')" class="group relative aspect-square overflow-hidden cursor-pointer bg-themed-secondary">
-                    <!-- ACCESSORIES COVER GOES HERE -->
-                    <img src="" class="w-full h-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105" />
-                    <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors"></div>
-                    <div class="absolute bottom-8 left-8">
-                        <h3 class="text-2xl font-black uppercase text-white">Accessories</h3>
-                        <div class="w-12 h-1 bg-[#FFEE00] mt-2 group-hover:w-full transition-all duration-500"></div>
-                    </div>
-                </div>
-            </section>
-
             <!-- Essentials Preview -->
             <section class="py-24 bg-themed-secondary text-primary">
                 <div class="max-w-7xl mx-auto px-6">
@@ -585,7 +554,6 @@
                     <ul class="space-y-4 text-sm font-bold text-zinc-500 uppercase font-black font-black font-black font-black">
                         <li><button onclick="navigateTo('new_drop')" class="hover:text-[#FFEE00]">New Arrivals</button></li>
                         <li><button onclick="navigateTo('essentials')" class="hover:text-[#FFEE00]">Bestsellers</button></li>
-                        <li><button onclick="navigateTo('accessories')" class="hover:text-[#FFEE00]">Accessories</button></li>
                         <li><button onclick="navigateTo('coming_soon')" class="hover:text-[#FFEE00]">Coming Soon</button></li>
                     </ul>
                 </div>
@@ -798,7 +766,7 @@
                     document.body.classList.add('after-hours-theme');
                     if (window.innerWidth >= 1024) document.body.classList.add('flashlight-active');
                 }
-            } else if (['new_drop', 'men', 'women', 'sale', 'outerwear', 'streetwear', 'accessories', 'essentials'].includes(viewId)) {
+            } else if (['new_drop', 'men', 'women', 'sale', 'essentials'].includes(viewId)) {
                 renderCollection(viewId);
                 document.getElementById('view-collection').classList.add('active');
             } else if (viewId === 'coming_soon') {
@@ -939,35 +907,15 @@
         }
 
         function renderCollection(viewId) {
-            const titleMap = { new_drop: 'New Drop', men: 'Men', women: 'Women', sale: 'Sale', outerwear: 'Outerwear', streetwear: 'Streetwear', accessories: 'Accessories', essentials: 'All Essentials' };
+            const titleMap = { new_drop: 'New Drop', men: 'Men', women: 'Women', sale: 'Sale', essentials: 'All Essentials' };
             const titleElement = document.getElementById('collection-title');
             const gridElement = document.getElementById('collection-grid');
             if (titleElement) titleElement.innerText = titleMap[viewId] || 'Collection';
             
             let filtered = collection;
-            if (viewId === 'outerwear') filtered = collection.filter(p => !p.isSweatpants);
-            if (viewId === 'accessories') filtered = [];
 
-            if (viewId === 'accessories' || (viewId === 'outerwear' && filtered.length === 0)) {
-                gridElement.classList.remove('grid');
-                const emptyMessage = viewId === 'accessories' 
-                    ? "Whoops! No items here yet, check back soon!" 
-                    : "Your wishlist is empty.";
-
-                gridElement.innerHTML = `
-                    <div class="col-span-full py-24 text-center text-primary">
-                        <i data-lucide="info" class="mx-auto mb-6 text-zinc-300 dark:text-zinc-700" size="48"></i>
-                        <p class="text-xl md:text-2xl font-black uppercase tracking-tighter text-zinc-400 px-4 font-black">
-                            ${emptyMessage}
-                        </p>
-                        <button onclick="handleBack()" class="mt-8 text-[#FFEE00] uppercase font-black tracking-widest text-xs hover:underline">
-                            Go Back
-                        </button>
-                    </div>`;
-            } else {
-                gridElement.classList.add('grid');
-                gridElement.innerHTML = filtered.map(p => createProductCard(p)).join('');
-            }
+            gridElement.classList.add('grid');
+            gridElement.innerHTML = filtered.map(p => createProductCard(p)).join('');
             lucide.createIcons();
         }
 
@@ -1039,7 +987,7 @@
 
         function refreshCurrentView() {
             if (currentView === 'home') document.getElementById('essentials-preview-grid').innerHTML = collection.slice(0, 4).map(e => createProductCard(e)).join('');
-            else if (['new_drop', 'men', 'women', 'sale', 'outerwear', 'streetwear', 'accessories', 'essentials'].includes(currentView)) renderCollection(currentView);
+            else if (['new_drop', 'men', 'women', 'sale', 'essentials'].includes(currentView)) renderCollection(currentView);
             else if (currentView === 'coming_soon') renderComingSoon();
             else if (currentView === 'wishlist') renderWishlist();
             else if (currentView === 'product_detail') renderProductDetail(currentProductId);
